@@ -1,0 +1,4 @@
+export default {
+  EMAIL_ALREADY_EXISTS: 1,
+  USERNAME_ALREADY_EXISTS: 2,
+}

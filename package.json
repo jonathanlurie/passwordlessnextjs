@@ -1,0 +1,22 @@
+{
+  "name": "passwordlessnext",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3030",
+    "build": "next build",
+    "start": "next start -p 3000"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.2.2",
+    "@sendgrid/mail": "^7.3.0",
+    "antd": "^4.7.3",
+    "cookie": "^0.4.1",
+    "jsonwebtoken": "^8.5.1",
+    "lmdb-store": "^0.7.1",
+    "next": "9.5.5",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "uuid": "^8.3.1"
+  }
+}
