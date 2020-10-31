@@ -27,32 +27,32 @@ function getStores() {
 
     // we'll not use the default store except for creating
     // other stores that are properly named
-    _stores.main = open({
+    const defaultDb = open({
       path: '_lmdb_stores',
       compression: true ,
     })
  
     // store the users where keys are uuid and value are object containing user data.
     // Data are: email, username, timestamp of creation
-    _stores.users = _stores.main.openDB('users',
+    _stores.users = defaultDb.openDB('users',
       {
         compression: true, 
       })
 
     // store where each key is a username and the associated values is the uuid of corresponding user
-    _stores.usernames = _stores.main.openDB('usernames',
+    _stores.usernames = defaultDb.openDB('usernames',
       {
         compression: true, 
       })
 
     // store where each key is an email and the associated values is the uuid of corresponding user
-    _stores.emails = _stores.main.openDB('emails',
+    _stores.emails = defaultDb.openDB('emails',
       {
         compression: true, 
       })
 
     // store where each key is a user's uuid and the associated value is an object, to store whatever
-    _stores.userExtras = _stores.main.openDB('userExtras',
+    _stores.userData = defaultDb.openDB('userExtras',
       {
         compression: true, 
       })
@@ -60,7 +60,7 @@ function getStores() {
     // store where each key is a magic link and the associated values is an object containing 
     // the uuid of corresponding user and the timestamp of magic link creation.
     // A magic link is removed after being used.
-    _stores.magicLinks = _stores.main.openDB('magicLinks',
+    _stores.magicLinks = defaultDb.openDB('magicLinks',
       {
         compression: true, 
       })
@@ -71,31 +71,26 @@ function getStores() {
 
 
 export default class DB {
-  static async test() {
-    const store = getStores()
-    await store.users.put('greeting', { someText: 'Helloooooo, World!' })
-  }
-
-  static async test2() {
-    const store = getStores()
-    const greetings = store.users.get('greeting')
-    console.log('greetings:', greetings)
-  }
-
-
   static hasUserFromEmail(email) {
     const stores = getStores()
-    return stores.emails.get(email) === undefined ? false : true
+    return !(stores.emails.get(email) === undefined)
   }
 
 
-  static usernameDoesExist(username) {
-    const store = getStores()
+  static hasUserFromUsername(username) {
+    const stores = getStores()
+    return !(stores.usernames.get(username) === undefined)
+  }
 
+
+  static hasUserFromUserId(userId) {
+    const stores = getStores()
+    return !(stores.users.get(userId) === undefined)
   }
   
+
   static async createUser(email, username) {
-    const store = getStores()
+    const stores = getStores()
 
     if (store.get(email) !== undefined) {
       throw new ErrorWithCode('This email already exists', ErrorCodes.EMAIL_ALREADY_EXISTS)
@@ -103,6 +98,56 @@ export default class DB {
 
     if (store.get(username) !== undefined) {
       throw new ErrorWithCode('This username already exists', ErrorCodes.USERNAME_ALREADY_EXISTS)
+    }
+
+    const userId = uuidv4()
+    
+    // create the userentry in the 'users' DB
+    await stores.users.put(userId, {
+      email,
+      username,
+      creationDate: Date.now(),
+      lastConnectionDate: null,
+    })
+
+    // create the entry for email lookup
+    await stores.emails.put(email, userId)
+
+    // create the entry for username lookup
+    await stores.usernames.put(username, userId)
+
+    // initialize the userData to an empty object
+    await stores.userData.put(userId, {})
+
+    // send a magic link
+    await DB.sendMagicLink(email)
+  }
+
+
+  static async sendMagicLink(email) {
+    const stores = getStores()
+
+    const userId = store.get(email)
+
+    if (userId === undefined) {
+      throw new ErrorWithCode('This email does not exist', ErrorCodes.EMAIL_NOT_EXISTING)
+    }
+
+    // create the entry for magic link
+    const magicPhrase = uuidv4()
+
+    stores.magicLinks.put(magicPhrase, {
+      userId,
+      creationDate: Date.now()
+    })
+
+    const magicLink = `${process.env.APP_URL}/api/connect?magic=${magicPhrase}`
+    console.log('🔗 The magic link: ', magicLink)
+
+    try {
+      await Email.sendMagicLink()
+    } catch (e) {
+      console.log('💥', e)
     }
   }
 }
