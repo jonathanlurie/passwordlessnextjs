@@ -2,14 +2,21 @@ import cookie from 'cookie'
 import { v4 as uuidv4 } from 'uuid'
 
 const LIMITER_COOKIE_NAME = 'api_limiter'
-const INTERVAL_MS = 2000
+const LIMIT_PER_SECONDS = 10
+
 let _visitors = {}
 
+// clearing every 10 seconds to not bloat memory with visit records
 setInterval(() => {
   _visitors = {}
-}, INTERVAL_MS  * 10)
+}, 10000)
 
-export default function limit(req, res) {
+
+/**
+ * Rejects (error code 429) queries if more than 10 per second
+ * for a given user (with unique identifier) 
+ */
+export default function apiLimiter(req, res) {
   let uniqueVisitorId = null
 
   // check if a cookie exist
@@ -37,12 +44,27 @@ export default function limit(req, res) {
     ))
   }
 
-  const now = Date.now()
+  // timestamp in seconds
+  const now = ~~(Date.now() / 1000)
 
-  if (uniqueVisitorId in _visitors && ??????????????) {
-    res.statusCode = 429
-    res.json({ error: 'Too many requests' })
+  console.log(uniqueVisitorId)
+
+  // adding an entry for this visitor
+  if (!(uniqueVisitorId in _visitors)) {
+    _visitors[uniqueVisitorId] = {}
   }
 
-  _visitors[uniqueVisitorId] 
+  // adding an entry for this timestamp
+  if (!(now in _visitors[uniqueVisitorId])) {
+    _visitors[uniqueVisitorId][now] = []
+  }
+  _visitors[uniqueVisitorId][now].push(1)
+
+  if (_visitors[uniqueVisitorId][now].length > LIMIT_PER_SECONDS) {
+    res.statusCode = 429
+    res.json({ error: 'Too many requests' })
+    return true
+  }
+
+  return false
 }

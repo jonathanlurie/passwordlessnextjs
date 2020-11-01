@@ -1,4 +1,5 @@
 import DB from '../../core/backend/DB'
+import apiLimiter from '../../core/backend/ApiLimiter'
 
 /**
  * Endpoint: /api/hasmail
@@ -6,8 +7,10 @@ import DB from '../../core/backend/DB'
  */
 
 export default (req, res) => {
-  if (!('email' in req.query))
-  console.log('req.query:', req.query)
+  if (apiLimiter(req, res)) {
+    return
+  }
+
   let email = null
 
   if (!('email' in req.query)) {

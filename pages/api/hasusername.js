@@ -1,4 +1,5 @@
 import DB from '../../core/backend/DB'
+import apiLimiter from '../../core/backend/ApiLimiter'
 
 /**
  * Endpoint: /api/hasusername
@@ -6,10 +7,9 @@ import DB from '../../core/backend/DB'
  */
 
 export default (req, res) => {
-
-  if (!('username' in req.query))
-  console.log('req.query:', req.query)
-  let username = null
+  if (apiLimiter(req, res)) {
+    return
+  }
 
   if (!('username' in req.query)) {
     res.statusCode = 404
