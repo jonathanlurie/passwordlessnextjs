@@ -1,8 +1,4 @@
-import cookie from 'cookie'
-import { v4 as uuidv4 } from 'uuid'
-
-const LIMITER_COOKIE_NAME = 'api_limiter'
-const LIMIT_PER_SECONDS = 10
+const LIMIT_PER_SECONDS = 3
 
 let _visitors = {}
 
@@ -13,46 +9,19 @@ setInterval(() => {
 
 
 /**
- * Rejects (error code 429) queries if more than 10 per second
- * for a given user (with unique identifier) 
+ * Middleware to limit API usage to 10 calls per seconds.
+ * Sets req.apiLimit to true if above or to false if below
  */
-export default function apiLimiter(req, res) {
-  let uniqueVisitorId = null
-
-  // check if a cookie exist
-  // Check if the the cookies contain the unique visitor ID
-  if (req.headers.cookie) {
-    const presentCookie = cookie.parse(req.headers.cookie)
-
-    if (LIMITER_COOKIE_NAME in presentCookie) {
-      uniqueVisitorId = presentCookie[LIMITER_COOKIE_NAME]
-    }
-  }
-
-  // if the cookie corresponding to the unique visitor ID was not found,
-  // we create one and add it to the cookie for next time.
-  if (!uniqueVisitorId) {
-    uniqueVisitorId = uuidv4()
-
-    res.setHeader(
-      'Set-Cookie',
-      cookie.serialize(LIMITER_COOKIE_NAME, String(uniqueVisitorId), {
-        maxAge: 60 * 60 * 24 * 365, // a year
-        httpOnly: true,
-        secure: !!process.env.PRODUCTION,
-      }
-    ))
-  }
-
-  // timestamp in seconds
-  const now = ~~(Date.now() / 1000)
-
-  console.log(uniqueVisitorId)
+export default function apiLimiter(req, res, next = null) {
+  const uniqueVisitorId = req.uniqueVisitorId
 
   // adding an entry for this visitor
   if (!(uniqueVisitorId in _visitors)) {
     _visitors[uniqueVisitorId] = {}
   }
+
+  // timestamp in seconds
+  const now = ~~(Date.now() / 1000)
 
   // adding an entry for this timestamp
   if (!(now in _visitors[uniqueVisitorId])) {
@@ -61,10 +30,14 @@ export default function apiLimiter(req, res) {
   _visitors[uniqueVisitorId][now].push(1)
 
   if (_visitors[uniqueVisitorId][now].length > LIMIT_PER_SECONDS) {
+    req.apiLimit = true
     res.statusCode = 429
     res.json({ error: 'Too many requests' })
-    return true
+  } else {
+    req.apiLimit = false
   }
 
-  return false
+  if (next) {
+    next()
+  }
 }
