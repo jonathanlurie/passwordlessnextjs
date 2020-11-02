@@ -89,6 +89,8 @@ export default class DB {
   }
   
 
+
+  
   static async createUser(email, username) {
     const stores = getStores()
 
@@ -120,36 +122,41 @@ export default class DB {
     await stores.userData.put(userId, {})
 
     // send a magic link
-    await DB.sendMagicLink(email)
+    // await DB.sendMagicLink(email)
   }
 
 
-  static async sendMagicLink(email) {
-    const stores = getStores()
+  // WRONG 
+  // The magic link must be a JWT with a validity of 10 minutes
+  // that contains the email. Then no need to store it, it's validity can be
+  // checked by the server with the hash.
 
-    const userId = store.get(email)
+  // static async sendMagicLink(email) {
+  //   const stores = getStores()
 
-    if (userId === undefined) {
-      throw new ErrorWithCode('This email does not exist', ErrorCodes.EMAIL_NOT_EXISTING)
-    }
+  //   const userId = store.get(email)
 
-    // create the entry for magic link
-    const magicPhrase = uuidv4()
+  //   if (userId === undefined) {
+  //     throw new ErrorWithCode('This email does not exist', ErrorCodes.EMAIL_NOT_EXISTING)
+  //   }
 
-    stores.magicLinks.put(magicPhrase, {
-      userId,
-      creationDate: Date.now()
-    })
+  //   // create the entry for magic link
+  //   const magicPhrase = uuidv4()
 
-    const magicLink = `${process.env.APP_URL}/api/connect?magic=${magicPhrase}`
-    console.log('🔗 The magic link: ', magicLink)
+  //   stores.magicLinks.put(magicPhrase, {
+  //     userId,
+  //     creationDate: Date.now()
+  //   })
 
-    try {
-      await Email.sendMagicLink()
-    } catch (e) {
-      console.log('💥', e)
-    }
-  }
+  //   const magicLink = `${process.env.APP_URL}/api/connect?magic=${magicPhrase}`
+  //   console.log('🔗 The magic link: ', magicLink)
+
+  //   try {
+  //     await Email.sendMagicLink()
+  //   } catch (e) {
+  //     console.log('💥', e)
+  //   }
+  // }
 }
 
 

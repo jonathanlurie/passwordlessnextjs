@@ -12,7 +12,7 @@ const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
   .get((req, res) => {
-    
+
     if (!('email' in req.query)) {
       res.statusCode = 404
       return res.json({ found: false })
