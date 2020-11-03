@@ -12,15 +12,9 @@ export default class Tools {
   }
 
 
-  static isAlphaNumericLowerCase(str) {
-    for (let i = 0, len = str.length; i < len; i++) {
-      let code = str.charCodeAt(i)
-      if (!(code > 47 && code < 58) && // numeric (0-9)
-          !(code > 96 && code < 123)) { // lower alpha (a-z)
-        return false
-      }
-    }
-    return true;
+  static isUsername(str) {
+    const validChars = 'abcdefghijkmlnopqrstuvwxyz01234567890-_'
+    return Array.from(str).every((c) => validChars.includes(c))
   }
 
   
