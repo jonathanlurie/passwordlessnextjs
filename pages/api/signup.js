@@ -4,7 +4,7 @@ import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
 
 /**
- * Endpoint: /api/hasemail
+ * Endpoint: /api/signup
  * To check if an email is already in the DB
  */
 

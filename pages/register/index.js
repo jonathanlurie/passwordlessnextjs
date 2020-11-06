@@ -86,17 +86,22 @@ export default class RegisterPage extends React.Component {
       this.setState({messageUsername: null, validUsername: true})
     }, 500)
 
+  }
 
 
+  onSubmit = async () => {    
+    const res = await fetch('/api/sendmagiclink', 
+      {
+        method: 'POST',
+        body: JSON.stringify({email: this._emailTest, username: this._usernameTest}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    
+    const resObj = await res.json()
 
-
-
-
-
-
-
-
-
+    console.log(resObj)
   }
 
 
@@ -120,10 +125,6 @@ export default class RegisterPage extends React.Component {
   }
 
 
-  onSubmit = () => {
-
-  }
-
   render() {
     return (
       <div>
@@ -137,7 +138,7 @@ export default class RegisterPage extends React.Component {
           {this.state.messageUsername}
         </p>
       
-        <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" htmlType="submit" onChange={this.onSubmit}>
+        <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" onClick={this.onSubmit}>
           Submit
         </Button>
         
