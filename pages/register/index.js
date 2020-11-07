@@ -11,6 +11,7 @@ export default class RegisterPage extends React.Component {
       validUsername: false,
       messageEmail: null,
       messageUsername: null,
+      successMessage: null,
     }
 
     this._hasEmailUpdated = false
@@ -102,6 +103,12 @@ export default class RegisterPage extends React.Component {
     const resObj = await res.json()
 
     console.log(resObj)
+
+    if (resObj.error) {
+      this.setState({successMessage: resObj.error})
+    } else {
+      this.setState({successMessage: 'Check you inbox! We just sent you a link to connect :)'})
+    }
   }
 
 
@@ -141,6 +148,8 @@ export default class RegisterPage extends React.Component {
         <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" onClick={this.onSubmit}>
           Submit
         </Button>
+
+        {this.state.successMessage ? <p>{this.state.successMessage}</p> : null}
         
       </div>
     )

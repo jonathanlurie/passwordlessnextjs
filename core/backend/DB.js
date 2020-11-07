@@ -28,7 +28,7 @@ function getStores() {
     // we'll not use the default store except for creating
     // other stores that are properly named
     const defaultDb = open({
-      path: '_lmdb_stores',
+      path: process.env.DB_FILENAME,
       compression: true ,
     })
  
@@ -94,11 +94,11 @@ export default class DB {
   static async createUser(email, username) {
     const stores = getStores()
 
-    if (store.get(email) !== undefined) {
+    if (stores.emails.get(email) !== undefined) {
       throw new ErrorWithCode('This email already exists', ErrorCodes.EMAIL_ALREADY_EXISTS)
     }
 
-    if (store.get(username) !== undefined) {
+    if (stores.usernames.get(username) !== undefined) {
       throw new ErrorWithCode('This username already exists', ErrorCodes.USERNAME_ALREADY_EXISTS)
     }
 
@@ -120,47 +120,6 @@ export default class DB {
 
     // initialize the userData to an empty object
     await stores.userData.put(userId, {})
-
-    // send a magic link
-    // await DB.sendMagicLink(email)
   }
 
-
-  // WRONG 
-  // The magic link must be a JWT with a validity of 10 minutes
-  // that contains the email. Then no need to store it, it's validity can be
-  // checked by the server with the hash.
-
-  // static async sendMagicLink(email) {
-  //   const stores = getStores()
-
-  //   const userId = store.get(email)
-
-  //   if (userId === undefined) {
-  //     throw new ErrorWithCode('This email does not exist', ErrorCodes.EMAIL_NOT_EXISTING)
-  //   }
-
-  //   // create the entry for magic link
-  //   const magicPhrase = uuidv4()
-
-  //   stores.magicLinks.put(magicPhrase, {
-  //     userId,
-  //     creationDate: Date.now()
-  //   })
-
-  //   const magicLink = `${process.env.APP_URL}/api/connect?magic=${magicPhrase}`
-  //   console.log('🔗 The magic link: ', magicLink)
-
-  //   try {
-  //     await Email.sendMagicLink()
-  //   } catch (e) {
-  //     console.log('💥', e)
-  //   }
-  // }
 }
-
-
-
-
-// await myStore.put('greeting', { someText: 'Hello, World!' })
-// myStore.get('greeting').someText // 'Hello, World!'

@@ -22,6 +22,7 @@ const handler = nc()
 
     const magicLinkToken = JWT.signupMagicLink(req.body.email, req.body.username)
     const signupUrl = `${process.env.APP_URL}/api/signup?token=${magicLinkToken}`
+    console.log('signupUrl: ', signupUrl)
     
     // try {
     //   await Email.sendMagicLink(email, signupUrl)

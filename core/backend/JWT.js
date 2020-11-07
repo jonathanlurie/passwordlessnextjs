@@ -32,7 +32,26 @@ export default class JWT {
   }
 
 
+  /**
+   * Generates a JWT that is only made for signup.
+   * This kind of token is valid for only 10 minutes.
+   * @param {string} email 
+   * @param {string} username 
+   * @return {string} a JWT with 'signup' as a subject
+   */
   static signupMagicLink(email, username) {
     return JWT.sign({subject: 'signup', email, username}, '10m')
+  }
+
+
+  /**
+   * Generates a refresh token. Not meant to be shared with the user,
+   * it is going to remain in a secure cookie.
+   * This kind of token is valid for 3 days.
+   * @param {*} email 
+   * @param {*} username 
+   */
+  static refreshToken(email, username) {
+    return JWT.sign({subject: 'refresh', email, username}, '3d')
   }
 }
