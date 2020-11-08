@@ -40,7 +40,7 @@ export default class JWT {
    * @return {string} a JWT with 'signup' as a subject
    */
   static signupMagicLink(email, username) {
-    return JWT.sign({subject: 'signup', email, username}, '10m')
+    return JWT.sign({subject: 'signup', email, username}, process.env.SIGNUP_TOKEN_LIFETIME)
   }
 
 
@@ -52,6 +52,11 @@ export default class JWT {
    * @param {*} username 
    */
   static refreshToken(email, username) {
-    return JWT.sign({subject: 'refresh', email, username}, '3d')
+    return JWT.sign({subject: 'refresh', email, username}, process.env.REFRESH_TOKEN_LIFETIME)
+  }
+
+
+  static accessToken(email, username) {
+    return JWT.sign({subject: 'access', email, username}, process.env.ACCESS_TOKEN_LIFETIME)
   }
 }
