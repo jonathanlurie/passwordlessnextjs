@@ -6,6 +6,7 @@
  * will have the following form {error: null|number, data: string}
  */
 
+import cookie from 'cookie'
 import nc from 'next-connect'
 import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/ApiLimiter'
@@ -19,12 +20,14 @@ const handler = nc()
   .use(apiLimiter)
   .get((req, res) => {
 
+    
+
     // looking for the refresh token from the cookies
     let refresh_token = null
     if (req.headers.cookie) {
       const presentCookie = cookie.parse(req.headers.cookie)
-      if (refresh_token in presentCookie) {
-        refresh_token = presentCookie[refresh_token]
+      if ('refresh_token' in presentCookie) {
+        refresh_token = presentCookie['refresh_token']
       }
     }
 

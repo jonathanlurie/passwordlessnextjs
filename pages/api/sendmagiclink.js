@@ -5,7 +5,7 @@ import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 
 
 /**
- * Endpoint: /api/sendmagiclink
+ * Endpoint: POST /api/sendmagiclink with body 'email' and 'username' (JSON encoded)
  * In charge of sending a signup email that contains a link
  * where the url param 'token' is a magic link to register.
  */

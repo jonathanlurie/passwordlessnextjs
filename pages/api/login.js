@@ -1,7 +1,7 @@
 /**
- * Endpoint: GET /api/signup?token=xxxxx
+ * Endpoint: GET /api/login?token=xxxxx
  * This endpoint is not to be used directly and is meant to to be targeted by
- * the magic link send as part of the signup process.
+ * the magic link send as part of the login process.
  */
 
 
@@ -22,33 +22,30 @@ const handler = nc()
     // the query parm 'token' must be present
     if (!('token' in req.query)) {
       res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_MISSING_TOKEN}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_MISSING_TOKEN}`)
     }
 
     // the token must be valid and still fresh
     const tokenInfo = JWT.verify(req.query.token)
     if (tokenInfo.error) {
       res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_INVALID_TOKEN}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN}`)
     }
 
     // the subject of the token must be 'signup'
-    if (tokenInfo.data.subject !== 'signup') {
+    if (tokenInfo.data.subject !== 'login') {
       res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_INVALID_TOKEN}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN}`)
     }
 
     const email = tokenInfo.data.email
     const username = tokenInfo.data.username
 
-    // the DB registration will check if the user already exists.
-    // This could be the case if the user has already used this token
-    try {
-      await DB.createUser(email, username)
-    } catch (e) { // e is of type ErrorWithCode
-      console.log(e)
-      res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${e.code}`)
+    // TODO: make it possible to login from email OR from username.
+    // as a result; the login (subject) token must be generated with
+    // the two fields but one can be undefined
+    if (DB.hasUserFromEmail(email)) {
+
     }
 
     // if everything is fine, a refresh token is put in the cookies.

@@ -17,7 +17,7 @@ class FailedSignupPage extends React.Component {
     let message = ''
 
     switch (parseInt(query.error)) {
-      case ErrorCode.SINUP_MISSING_TOKEN:
+      case ErrorCode.SIGNUP_MISSING_TOKEN:
         message = 'Missing signup token'
         break
       case ErrorCode.SIGNUP_INVALID_TOKEN:
