@@ -91,7 +91,7 @@ export default class RegisterPage extends React.Component {
 
 
   onSubmit = async () => {    
-    const res = await fetch('/api/sendmagiclink', 
+    const res = await fetch('/api/sendSignupLink', 
       {
         method: 'POST',
         body: JSON.stringify({email: this._emailTest, username: this._usernameTest}),

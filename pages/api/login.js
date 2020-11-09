@@ -38,19 +38,30 @@ const handler = nc()
       return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN}`)
     }
 
-    const email = tokenInfo.data.email
-    const username = tokenInfo.data.username
+    let email = tokenInfo.data.email
+    let username = tokenInfo.data.username
 
-    // TODO: make it possible to login from email OR from username.
-    // as a result; the login (subject) token must be generated with
-    // the two fields but one can be undefined
-    if (DB.hasUserFromEmail(email)) {
-
+    // at least one of the two is required
+    if (!email && !username) {
+      res.statusCode = 302
+      return res.redirect(`/failedlogin?error=${ErrorCodes.CREDENTIALS_NOT_PROVIDED}`)
     }
+
+    // if the first function returns non null, the second is not called
+    let user = DB.getUserFromEmail(email) || DB.getUserFromUsername(username)
+
+    if (!user) {
+      res.statusCode = 302
+      return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING}`)
+    }
+    
+    // we can now take the username and email from the BD
+    email = user.email
+    username = user.username
 
     // if everything is fine, a refresh token is put in the cookies.
     // as for the uniqueVisitorId, this cookie is not visible from
-    // the frontend.
+    // the frontend but will enable the user fetching the /api/refresh endpoint
     const refreshToken = JWT.refreshToken(email, username)
     res.setHeader(
       'Set-Cookie',
@@ -65,7 +76,7 @@ const handler = nc()
     // the home page can display a little baner message to welcome
     // the new visitor.
     res.statusCode = 302
-    return res.redirect(`/?scenario=signup`)
+    return res.redirect(`/?scenario=login`)
   })
 
 

@@ -89,6 +89,40 @@ export default class DB {
   }
   
 
+  static getUserFromEmail(email) {
+    const stores = getStores()
+    const userId = stores.emails.get(email)
+
+    if (!userId) {
+      return null
+    }
+
+    const user = stores.users.get(userId)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
+
+
+  static getUserFromUsername(username) {
+    const stores = getStores()
+    const userId = stores.usernames.get(username)
+
+    if (!userId) {
+      return null
+    }
+
+    const user = stores.users.get(userId)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
 
   
   static async createUser(email, username) {

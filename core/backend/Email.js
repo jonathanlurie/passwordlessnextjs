@@ -15,12 +15,12 @@ export default class Email {
   }
 
 
-  static async sendMagicLink(to, linkUrl) {
+  static async sendSignupLink(to, linkUrl, username) {
 
     const html = `
       <div>
         <p>
-          Hello,
+          Welcome onboard ${username}!
         </p>
         <p>
           you can connect to ${process.env.PRODUCT_NAME} simply by clicking <a href="${linkUrl}">here</a>.
@@ -34,7 +34,33 @@ export default class Email {
 
     await sendEmail.sendEmail(to,
       {
-        subject: `Connect to ${process.env.PRODUCT_NAME}`,
+        subject: `Signup to ${process.env.PRODUCT_NAME}`,
+        text: `Hello,\nfollow this link to connect to ${process.env.PRODUCT_NAME}:\n${linkUrl}\nBest,\nThe ${process.env.PRODUCT_NAME} team.`,
+        html,
+      })
+  }
+
+
+  static async sendLoginLink(to, linkUrl, username) {
+
+    const html = `
+      <div>
+        <p>
+          Hello again ${username},
+        </p>
+        <p>
+          you can connect to ${process.env.PRODUCT_NAME} simply by clicking <a href="${linkUrl}">here</a>.
+        </p>
+        <p>
+          Best,<br>
+          The ${process.env.PRODUCT_NAME} team.
+        </p>
+      </div>
+    `
+
+    await sendEmail.sendEmail(to,
+      {
+        subject: `Login to ${process.env.PRODUCT_NAME}`,
         text: `Hello,\nfollow this link to connect to ${process.env.PRODUCT_NAME}:\n${linkUrl}\nBest,\nThe ${process.env.PRODUCT_NAME} team.`,
         html,
       })
