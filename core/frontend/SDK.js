@@ -12,5 +12,11 @@ export default class SDK {
     return json.found
   }
 
-  // TODO: add an account is just adding a record with magic link
+
+  static async hasEmailOrUsername(emailOrUsername) {
+    const res = await fetch(`/api/hasemailorusername?emailorusername=${encodeURIComponent(emailOrUsername)}`)
+    const json = await res.json()
+    return json.found
+  }
+
 }

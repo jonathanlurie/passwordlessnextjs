@@ -129,11 +129,11 @@ export default class DB {
     const stores = getStores()
 
     if (stores.emails.get(email) !== undefined) {
-      throw new ErrorWithCode('This email already exists', ErrorCodes.EMAIL_ALREADY_EXISTS)
+      throw new ErrorWithCode('This email already exists', ErrorCodes.EMAIL_ALREADY_EXISTS.code)
     }
 
     if (stores.usernames.get(username) !== undefined) {
-      throw new ErrorWithCode('This username already exists', ErrorCodes.USERNAME_ALREADY_EXISTS)
+      throw new ErrorWithCode('This username already exists', ErrorCodes.USERNAME_ALREADY_EXISTS.code)
     }
 
     const userId = uuidv4()

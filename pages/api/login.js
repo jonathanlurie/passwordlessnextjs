@@ -22,37 +22,31 @@ const handler = nc()
     // the query parm 'token' must be present
     if (!('token' in req.query)) {
       res.statusCode = 302
-      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_MISSING_TOKEN}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_MISSING_TOKEN.code}`)
     }
 
     // the token must be valid and still fresh
     const tokenInfo = JWT.verify(req.query.token)
     if (tokenInfo.error) {
       res.statusCode = 302
-      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN.code}`)
     }
 
     // the subject of the token must be 'signup'
     if (tokenInfo.data.subject !== 'login') {
       res.statusCode = 302
-      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN.code}`)
     }
 
     let email = tokenInfo.data.email
     let username = tokenInfo.data.username
-
-    // at least one of the two is required
-    if (!email && !username) {
-      res.statusCode = 302
-      return res.redirect(`/failedlogin?error=${ErrorCodes.CREDENTIALS_NOT_PROVIDED}`)
-    }
 
     // if the first function returns non null, the second is not called
     let user = DB.getUserFromEmail(email) || DB.getUserFromUsername(username)
 
     if (!user) {
       res.statusCode = 302
-      return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING}`)
+      return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING.code}`)
     }
     
     // we can now take the username and email from the BD

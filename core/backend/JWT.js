@@ -45,6 +45,18 @@ export default class JWT {
 
 
   /**
+   * Generates a JWT that is only made for loging in.
+   * This kind of token is valid for only 10 minutes.
+   * @param {string} email 
+   * @param {string} username 
+   * @return {string} a JWT with 'login' as a subject
+   */
+  static loginMagicLink(email, username) {
+    return JWT.sign({subject: 'login', email, username}, process.env.LOGIN_TOKEN_LIFETIME)
+  }
+
+
+  /**
    * Generates a refresh token. Not meant to be shared with the user,
    * it is going to remain in a secure cookie.
    * This kind of token is valid for 3 days.

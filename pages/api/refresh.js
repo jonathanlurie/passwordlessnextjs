@@ -34,14 +34,14 @@ const handler = nc()
     // refresh token not found!
     if (refresh_token === null) {
       res.statusCode = 403
-      return res.json({ error: ErrorCodes.REFRESH_TOKEN_NOT_FOUND, data: null})
+      return res.json({ error: ErrorCodes.REFRESH_TOKEN_NOT_FOUND.code, data: null})
     }
 
     // if found, the refresh token still must be checked
     const refreshTokenInfo = JWT.verify(refresh_token)
     if (refreshTokenInfo.error || refreshTokenInfo.data.subject !== 'refresh') {
       res.statusCode = 403
-      return res.json({ error: ErrorCodes.REFRESH_TOKEN_INVALID, data: null})
+      return res.json({ error: ErrorCodes.REFRESH_INVALID_TOKEN.code, data: null})
     }
 
     // From this point, we know we have a valid token. Though, the username and
@@ -51,12 +51,12 @@ const handler = nc()
 
     if (!DB.hasUserFromEmail(email)) {
       res.statusCode = 404
-      res.json({ error: ErrorCodes.EMAIL_NOT_EXISTING, data: null})
+      res.json({ error: ErrorCodes.EMAIL_NOT_EXISTING.code, data: null})
     }
 
     if (!DB.hasUserFromUsername(username)) {
       res.statusCode = 404
-      res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING, data: null})
+      res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING.code, data: null})
     }
 
     // from here, things are good.

@@ -91,7 +91,7 @@ export default class RegisterPage extends React.Component {
 
 
   onSubmit = async () => {    
-    const res = await fetch('/api/sendSignupLink', 
+    const res = await fetch('/api/sendsignuplink', 
       {
         method: 'POST',
         body: JSON.stringify({email: this._emailTest, username: this._usernameTest}),
@@ -146,7 +146,7 @@ export default class RegisterPage extends React.Component {
         </p>
       
         <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" onClick={this.onSubmit}>
-          Submit
+          Signup
         </Button>
 
         {this.state.successMessage ? <p>{this.state.successMessage}</p> : null}

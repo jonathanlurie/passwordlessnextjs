@@ -19,7 +19,7 @@ const handler = nc()
     
     if (!('username' in req.body) || !('email' in req.body)) {
       res.statusCode = 404
-      return res.json({ error: ErrorCodes.CREDENTIALS_NOT_PROVIDED })
+      return res.json({ error: ErrorCodes.CREDENTIALS_NOT_PROVIDED.code })
     }
 
     const username = req.body.username
@@ -28,12 +28,12 @@ const handler = nc()
     // the email and username cannot be already taken
     if (DB.hasUserFromEmail(email)) {
       res.statusCode = 403
-      return res.json({ error: ErrorCodes.EMAIL_ALREADY_EXISTS })
+      return res.json({ error: ErrorCodes.EMAIL_ALREADY_EXISTS.code })
     }
 
     if (DB.hasUserFromUsername(username)) {
       res.statusCode = 403
-      return res.json({ error: ErrorCodes.USERNAME_ALREADY_EXISTS })
+      return res.json({ error: ErrorCodes.USERNAME_ALREADY_EXISTS.code })
     }
 
     const magicLinkToken = JWT.signupMagicLink(req.body.email, req.body.username)

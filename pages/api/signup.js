@@ -22,20 +22,20 @@ const handler = nc()
     // the query parm 'token' must be present
     if (!('token' in req.query)) {
       res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_MISSING_TOKEN}`)
+      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_MISSING_TOKEN.code}`)
     }
 
     // the token must be valid and still fresh
     const tokenInfo = JWT.verify(req.query.token)
     if (tokenInfo.error) {
       res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_INVALID_TOKEN}`)
+      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_INVALID_TOKEN.code}`)
     }
 
     // the subject of the token must be 'signup'
     if (tokenInfo.data.subject !== 'signup') {
       res.statusCode = 302
-      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_INVALID_TOKEN}`)
+      return res.redirect(`/failedsignup?error=${ErrorCodes.SIGNUP_INVALID_TOKEN.code}`)
     }
 
     const email = tokenInfo.data.email

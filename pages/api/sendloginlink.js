@@ -1,4 +1,5 @@
 import nc from 'next-connect'
+import DB from '../../core/backend/DB'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/ApiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
@@ -14,20 +15,32 @@ const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
   .post(async (req, res) => {
-    
-    if (!('username' in req.body) || !('email' in req.body)) {
-      res.statusCode = 404
-      return res.json({ error: 'Username and email must be provided' })
-    }
+    const emailOrUsername = req.body.emailorusername
 
-    // TODO: fetch username AND email; We do it in the api/login.js instead but we should not
-    // and the token sent by email should contain the two already
-    const magicLinkToken = JWT.signupMagicLink(req.body.email, req.body.username)
-    const signupUrl = `${process.env.APP_URL}/api/signup?token=${magicLinkToken}`
-    console.log('signupUrl: ', signupUrl)
+    // at least one of the two is required
+    if (!emailOrUsername) {
+      res.statusCode = 302
+      return res.redirect(`/failedlogin?error=${ErrorCodes.CREDENTIALS_NOT_PROVIDED.code}`)
+    }
+    console.log('DEBUG01')
+    // if the first function returns non null, the second is not called
+    let user = DB.getUserFromEmail(emailOrUsername) || DB.getUserFromUsername(emailOrUsername)
+    console.log('DEBUG02')
+    if (!user) {
+      res.statusCode = 302
+      return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING.code}`)
+    }
+    
+    // we can now take the username and email from the BD
+    const email = user.email
+    const username = user.username
+    
+    const magicLinkToken = JWT.loginMagicLink(email, username)
+    const loginUrl = `${process.env.APP_URL}/api/login?token=${magicLinkToken}`
+    console.log('loginUrl: ', loginUrl)
     
     // try {
-    //   await Email.sendSignupLink(email, signupUrl, req.body.username)
+    //   await Email.sendLoginLink(email, loginUrl, username)
     // } catch (e) {
     //   res.statusCode = 503
     //   return res.json({ error: 'Unable to send the email.' })
