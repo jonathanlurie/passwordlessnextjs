@@ -60,7 +60,8 @@ const ERRORS = {
 }
 
 export function getMessageFromCode(code) {
-  let error = Object.values(ERRORS).filter(e => e.code === code)
+  const intCode = parseInt(code)
+  let error = Object.values(ERRORS).filter(e => e.code === intCode)
   return error.length > 0 ? error[0].message : ERRORS.UNKNOWN_ERROR.message
 }
 

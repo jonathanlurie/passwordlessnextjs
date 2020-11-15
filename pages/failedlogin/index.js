@@ -1,9 +1,9 @@
 import React from 'react'
 import { withRouter } from 'next/router'
-import { getMessageFromCode }  from '../../core/fullstack/ErrorCodes'
+import { getMessageFromCode } from '../../core/fullstack/ErrorCodes'
 
 
-class FailedSignupPage extends React.Component {
+class FailedLoginPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -13,11 +13,11 @@ class FailedSignupPage extends React.Component {
   render() {
     // in case we need a message or error code, it could be in the URL
     const query = this.props.router.query
-    const message = getMessageFromCode(query.error)
+    let message = getMessageFromCode(query.error)
 
     return (
       <div>
-        <h1>The signup failed :(</h1>
+        <h1>The login failed :(</h1>
         <p>
           {message}
         </p>
@@ -26,4 +26,4 @@ class FailedSignupPage extends React.Component {
   }
 }
 
-export default withRouter(FailedSignupPage)
+export default withRouter(FailedLoginPage)
