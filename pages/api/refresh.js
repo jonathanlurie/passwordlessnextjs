@@ -20,8 +20,6 @@ const handler = nc()
   .use(apiLimiter)
   .get((req, res) => {
 
-    
-
     // looking for the refresh token from the cookies
     let refresh_token = null
     if (req.headers.cookie) {

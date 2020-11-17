@@ -13,3 +13,8 @@ todo
 - *[Sendgrid](https://github.com/sendgrid/sendgrid-nodejs/tree/main/packages/mail)* to send email for passwordless login
 - *[node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)* to create JWT for both refresh tokens and access tokens
 - *[Cookies](https://github.com/jshttp/cookie)* to manage cookies from server-side
+
+# TODO
+- backend middleware to get the access token
+- update last connection date when hitting the /api/refresh endpoint
+- add SDK function to get the user data and user extras

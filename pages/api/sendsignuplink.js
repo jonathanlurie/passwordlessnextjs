@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/ApiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
-import DB from '../../core/DB'
+import DB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 
 

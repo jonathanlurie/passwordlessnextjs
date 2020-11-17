@@ -52,15 +52,7 @@ function getStores() {
       })
 
     // store where each key is a user's uuid and the associated value is an object, to store whatever
-    _stores.userData = defaultDb.openDB('userExtras',
-      {
-        compression: true, 
-      })
-
-    // store where each key is a magic link and the associated values is an object containing 
-    // the uuid of corresponding user and the timestamp of magic link creation.
-    // A magic link is removed after being used.
-    _stores.magicLinks = defaultDb.openDB('magicLinks',
+    _stores.userExtras = defaultDb.openDB('userExtras',
       {
         compression: true, 
       })
@@ -140,6 +132,7 @@ export default class DB {
     
     // create the userentry in the 'users' DB
     await stores.users.put(userId, {
+      userId,
       email,
       username,
       creationDate: Date.now(),
@@ -152,8 +145,45 @@ export default class DB {
     // create the entry for username lookup
     await stores.usernames.put(username, userId)
 
-    // initialize the userData to an empty object
-    await stores.userData.put(userId, {})
+    // initialize the userExtras to an empty object
+    await stores.userExtras.put(userId, {})
+  }
+
+
+
+  static getUserExtraDataById(userId) {
+    const stores = getStores()
+    const userExtra = stores.userExtras.get(userId)
+
+    if (!userExtra) {
+      return null
+    }
+
+    return userExtra
+  }
+
+
+  static getUserExtraDataByEmail(email) {
+    const stores = getStores()
+    const userId = stores.emails.get(email)
+
+    if (!userId) {
+      return null
+    }
+
+    return DB.getUserExtraDataById(userId)
+  }
+
+
+  static getUserExtraDataByUsername(username) {
+    const stores = getStores()
+    const userId = stores.usernames.get(username)
+
+    if (!userId) {
+      return null
+    }
+
+    return DB.getUserExtraDataById(userId)
   }
 
 }
