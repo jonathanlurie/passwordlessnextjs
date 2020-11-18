@@ -5,7 +5,7 @@ import cookie from 'cookie'
 // but for the sake of server-side reuse, it's also added in req.uniqueVisitorId.
 // If it's already present in the cookies, then it's just rtrieved and the
 // cookie is not overwritten.
-export default function uniqueVisitorId(req, res, next = null) {
+export default function uniqueVisitorId(req, res, next) {
   const LIMITER_COOKIE_NAME = 'api_limiter'
   let uniqueVisitorId = null
 
@@ -36,8 +36,5 @@ export default function uniqueVisitorId(req, res, next = null) {
 
   // adding it in the req object
   req.uniqueVisitorId = uniqueVisitorId
-
-  if (next) {
-    next()
-  }
+  next()
 }

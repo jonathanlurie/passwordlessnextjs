@@ -64,24 +64,36 @@ function getStores() {
 
 export default class DB {
   static hasUserFromEmail(email) {
+    if (email === undefined || email === null) {
+      return false
+    }
     const stores = getStores()
     return !(stores.emails.get(email) === undefined)
   }
 
 
   static hasUserFromUsername(username) {
+    if (username === undefined || username === null) {
+      return false
+    }
     const stores = getStores()
     return !(stores.usernames.get(username) === undefined)
   }
 
 
   static hasUserFromUserId(userId) {
+    if (userId === undefined || userId === null) {
+      return false
+    }
     const stores = getStores()
     return !(stores.users.get(userId) === undefined)
   }
   
 
   static getUserFromEmail(email) {
+    if (email === undefined || email === null) {
+      return null
+    }
     const stores = getStores()
     const userId = stores.emails.get(email)
 
@@ -100,6 +112,9 @@ export default class DB {
 
 
   static getUserFromUsername(username) {
+    if (username === undefined || username === null) {
+      return null
+    }
     const stores = getStores()
     const userId = stores.usernames.get(username)
 
@@ -118,6 +133,13 @@ export default class DB {
 
   
   static async createUser(email, username) {
+    if (username === undefined
+    || username === null
+    || email === undefined
+    || email === null) {
+      throw new ErrorWithCode('This email already exists', ErrorCodes.INVALID_ENTRY.code)
+    }
+
     const stores = getStores()
 
     if (stores.emails.get(email) !== undefined) {
@@ -152,6 +174,9 @@ export default class DB {
 
 
   static getUserExtraDataById(userId) {
+    if (userId === undefined || userId === null) {
+      return null
+    }
     const stores = getStores()
     const userExtra = stores.userExtras.get(userId)
 
@@ -163,27 +188,5 @@ export default class DB {
   }
 
 
-  static getUserExtraDataByEmail(email) {
-    const stores = getStores()
-    const userId = stores.emails.get(email)
-
-    if (!userId) {
-      return null
-    }
-
-    return DB.getUserExtraDataById(userId)
-  }
-
-
-  static getUserExtraDataByUsername(username) {
-    const stores = getStores()
-    const userId = stores.usernames.get(username)
-
-    if (!userId) {
-      return null
-    }
-
-    return DB.getUserExtraDataById(userId)
-  }
 
 }

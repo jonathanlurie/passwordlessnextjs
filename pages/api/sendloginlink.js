@@ -1,9 +1,9 @@
 import nc from 'next-connect'
 import DB from '../../core/backend/DB'
 import JWT from '../../core/backend/JWT'
-import apiLimiter from '../../core/backend/ApiLimiter'
+import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
-
+import Email from '../../core/backend/Email'
 
 /**
  * Endpoint: POST /api/sendloginlink with body 'email' and 'username' (JSON encoded)
@@ -22,10 +22,8 @@ const handler = nc()
       res.statusCode = 302
       return res.redirect(`/failedlogin?error=${ErrorCodes.CREDENTIALS_NOT_PROVIDED.code}`)
     }
-    console.log('DEBUG01')
     // if the first function returns non null, the second is not called
     let user = DB.getUserFromEmail(emailOrUsername) || DB.getUserFromUsername(emailOrUsername)
-    console.log('DEBUG02')
     if (!user) {
       res.statusCode = 302
       return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING.code}`)
@@ -39,12 +37,14 @@ const handler = nc()
     const loginUrl = `${process.env.APP_URL}/api/login?token=${magicLinkToken}`
     console.log('loginUrl: ', loginUrl)
     
-    // try {
-    //   await Email.sendLoginLink(email, loginUrl, username)
-    // } catch (e) {
-    //   res.statusCode = 503
-    //   return res.json({ error: 'Unable to send the email.' })
-    // }
+    try {
+      await Email.sendLoginLink(email, loginUrl, username)
+      console.log('The email was sent.')
+    } catch (e) {
+      console.log(e)
+      res.statusCode = 503
+      return res.json({ error: 'Unable to send the email.' })
+    }
     
 
     res.statusCode = 200

@@ -46,7 +46,6 @@ export default class LoginPage extends React.Component {
     
     const resObj = await res.json()
 
-    console.log(resObj)
 
     if (resObj.error) {
       this.setState({successMessage: resObj.error})

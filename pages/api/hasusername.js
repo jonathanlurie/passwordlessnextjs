@@ -1,5 +1,5 @@
 import DB from '../../core/backend/DB'
-import apiLimiter from '../../core/backend/ApiLimiter'
+import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
 

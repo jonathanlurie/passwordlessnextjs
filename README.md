@@ -16,5 +16,6 @@ todo
 
 # TODO
 - backend middleware to get the access token
+- create dummy endpoint that uses the access token + with both get and POST/UPDATE
 - update last connection date when hitting the /api/refresh endpoint
 - add SDK function to get the user data and user extras

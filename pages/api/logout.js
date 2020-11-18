@@ -7,7 +7,7 @@
 
 import cookie from 'cookie'
 import nc from 'next-connect'
-import apiLimiter from '../../core/backend/ApiLimiter'
+import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 
 
@@ -26,8 +26,10 @@ const handler = nc()
       }
     ))
 
-    res.statusCode = 200
-    res.json({ error: null })
+    // res.statusCode = 200
+    // res.json({ error: null })
+    res.statusCode = 302
+    return res.redirect(`/`)
   })
 
 export default handler

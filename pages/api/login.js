@@ -7,7 +7,7 @@
 
 import cookie from 'cookie'
 import DB from '../../core/backend/DB'
-import apiLimiter from '../../core/backend/ApiLimiter'
+import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
@@ -70,7 +70,7 @@ const handler = nc()
     // the home page can display a little baner message to welcome
     // the new visitor.
     res.statusCode = 302
-    return res.redirect(`/?scenario=login`)
+    return res.redirect(`/home`)
   })
 
 

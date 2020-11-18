@@ -1,9 +1,10 @@
 import nc from 'next-connect'
 import JWT from '../../core/backend/JWT'
-import apiLimiter from '../../core/backend/ApiLimiter'
+import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import DB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
+import Email from '../../core/backend/Email'
 
 
 /**
@@ -40,12 +41,14 @@ const handler = nc()
     const signupUrl = `${process.env.APP_URL}/api/signup?token=${magicLinkToken}`
     console.log('signupUrl: ', signupUrl)
     
-    // try {
-    //   await Email.sendSignupLink(email, signupUrl, req.body.username)
-    // } catch (e) {
-    //   res.statusCode = 503
-    //   return res.json({ error: 'Unable to send the email.' })
-    // }
+    try {
+      await Email.sendSignupLink(email, signupUrl, req.body.username)
+      console.log('The email was sent.')
+    } catch (e) {
+      console.log(e)
+      res.statusCode = 503
+      return res.json({ error: 'Unable to send the email.' })
+    }
     
 
     res.statusCode = 200

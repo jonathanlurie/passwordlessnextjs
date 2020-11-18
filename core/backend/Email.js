@@ -7,7 +7,7 @@ export default class Email {
   static async sendEmail(to, options = {}) {
     const msg = {
       to,
-      from: 'from' in options ? options.from : process.env.DEFAULT_EMAIL_SENDER,
+      from: 'from' in options ? options.from : `${process.env.PRODUCT_NAME} <${process.env.DEFAULT_EMAIL_SENDER}>`,
       subject: 'subject' in options ? options.subject : '',
       text: 'text' in options ? options.text : '',
       html: 'html' in options ? options.html : '',
@@ -34,7 +34,7 @@ export default class Email {
       </div>
     `
 
-    await sendEmail.sendEmail(to,
+    await Email.sendEmail(to,
       {
         subject: `Signup to ${process.env.PRODUCT_NAME}`,
         text: `Hello,\nfollow this link to connect to ${process.env.PRODUCT_NAME}:\n${linkUrl}\nBest,\nThe ${process.env.PRODUCT_NAME} team.`,
@@ -60,7 +60,7 @@ export default class Email {
       </div>
     `
 
-    await sendEmail.sendEmail(to,
+    await Email.sendEmail(to,
       {
         subject: `Login to ${process.env.PRODUCT_NAME}`,
         text: `Hello,\nfollow this link to connect to ${process.env.PRODUCT_NAME}:\n${linkUrl}\nBest,\nThe ${process.env.PRODUCT_NAME} team.`,
