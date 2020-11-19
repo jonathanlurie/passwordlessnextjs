@@ -1,60 +1,63 @@
 import React from 'react'
+import { Input, Button } from 'antd'
 import SDK from '../../core/frontend/SDK'
-import { getMessageFromCode } from '../../core/fullstack/ErrorCodes'
 import LogoutButton from '../../components/LogoutButton'
+import TokenizedPage from '../../components/TokenizedPage'
+const { TextArea } = Input
 
 
 export default class HomePage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      ready: false,
-      message: 'Fetching data...',
-      privateData: null,
+      userExtra: null,
     }
+
+    this._text = null
   }
 
 
-  componentDidMount() {
-    this.init()
-  }
-
-
-  init = async () => {
-    // trying to fetch the access token. If success, it is put somewhere safe
-    // by the SDK (no need to get it from here)
-    const tokenInfo = await SDK.refreshToken()
-    if (tokenInfo.error) {
-      return this.setState({
-        message: getMessageFromCode(tokenInfo.error)
-      })
-    }
-
-    const userData = await SDK.getUserExtra()
+  /**
+   * This method is called only when the TokenizedPage is ready and since
+   * we are using `redirectOnFailedLogin`, this is executed only if a valid
+   * access token could be fetched.
+   */
+  onTokenizedPageReady = async () => {
+    // fetching user extra data
+    const userExtraInfo = await SDK.getUserExtra()
+    this._text = userExtraInfo.data || ''
     this.setState({
-      ready: true,
-      privateData: userData,
+      userExtra: userExtraInfo.data,
     })
   }
 
 
+  onTextChange = (e) => {
+    this._text = e.target.value
+  }
+
+
+  saveText = async () => {
+    // TODO: use the SDK to save the text stored in this._text
+    // in the DB, userExtra is now a text
+  }
+
+  
+
+
   render() {
 
-    if (!this.state.ready) {
-      return (
-        <div>
-        {this.state.message}
-        </div>
-      )
-    }
-
     return (
-      <div>
-        <LogoutButton/>
-        <pre>
-          {JSON.stringify(this.state.privateData, null, 2)}
-        </pre>
-      </div>
+      <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
+        <div>
+          <LogoutButton/>
+          <pre>
+            {JSON.stringify(this.state.userExtra, null, 2)}
+          </pre>
+          <TextArea rows={10} defaultValue={this._text} onChange={this.onTextChange}/>
+          <Button onClick={this.saveText}>Save</Button>
+        </div>
+      </TokenizedPage>
     )
   }
 }

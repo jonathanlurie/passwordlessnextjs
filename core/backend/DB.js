@@ -168,7 +168,7 @@ export default class DB {
     await stores.usernames.put(username, userId)
 
     // initialize the userExtras to an empty object
-    await stores.userExtras.put(userId, {})
+    await stores.userExtras.put(userId, '')
   }
 
 
