@@ -34,6 +34,31 @@ const handler = nc()
   })
 
 
-export default handler
+  .post(async (req, res) => {
+    const email = req.accessTokenData.email
+    const username = req.accessTokenData.username
+    let user = DB.getUserFromEmail(email) || DB.getUserFromUsername(username)
 
-// http://localhost:3030/api/signup?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijoic2lnbnVwIiwiZW1haWwiOiJ6ZXJ0QHl0cmV6LmZyIiwidXNlcm5hbWUiOiJqb2pvIiwiaWF0IjoxNjA0NzU5NjQzLCJleHAiOjE2MDQ3NjAyNDN9._p45MmiWlqBgjMuB7B0Fmt2ylixQ3jtnAAc38lDytb4
+    if (!user) {
+      res.statusCode = 401
+      return res.json({data: null, error: ErrorCodes.USER_NOT_EXISTING.code})
+    }
+
+    if (!req.body) {
+      res.statusCode = 417
+      return res.json({data: null, error: ErrorCodes.MISSING_DATA_FOR_UPDATING.code})
+    }
+
+    if (typeof req.body !== 'object') {
+      res.statusCode = 417
+      return res.json({data: null, error: ErrorCodes.WRONG_DATA_FORMAT.code})
+    }
+
+    DB.setUserExtraDataById(user.userId, req.body)
+
+    res.statusCode = 200
+    return res.json({data: 'Data updated', error: null})
+  })
+
+
+export default handler

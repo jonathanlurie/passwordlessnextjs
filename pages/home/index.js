@@ -10,10 +10,10 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      userExtra: null,
+      text: '',
     }
 
-    this._text = null
+    this._userExtra = null
   }
 
 
@@ -24,37 +24,60 @@ export default class HomePage extends React.Component {
    */
   onTokenizedPageReady = async () => {
     // fetching user extra data
-    const userExtraInfo = await SDK.getUserExtra()
-    this._text = userExtraInfo.data || ''
-    this.setState({
-      userExtra: userExtraInfo.data,
-    })
+
+    let userExtraInfo = null
+    
+    try {
+      userExtraInfo = await SDK.getUserExtra()
+    } catch(e) {
+      // TODO: deal with this error
+      console.log('error 1')
+      return
+    }
+
+    if (userExtraInfo.error) {
+      // TODO: deal with the error
+      console.log('error 2')
+      return
+    }
+
+    this._userExtra = userExtraInfo.data
+
+    if (!this._userExtra) {
+      this._userExtra = {}
+    }
+
+    if (this._userExtra.text) {
+      this.setState({
+        text: this._userExtra.text
+      })
+    }
   }
 
 
   onTextChange = (e) => {
-    this._text = e.target.value
+    this.setState({
+      text: e.target.value
+    })
   }
 
 
   saveText = async () => {
-    // TODO: use the SDK to save the text stored in this._text
-    // in the DB, userExtra is now a text
+    this._userExtra.text = this.state.text
+    const response = await SDK.postUserExtra(this._userExtra)
+    console.log('response: ', response)
   }
-
-  
 
 
   render() {
-
     return (
       <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
         <div>
           <LogoutButton/>
-          <pre>
-            {JSON.stringify(this.state.userExtra, null, 2)}
-          </pre>
-          <TextArea rows={10} defaultValue={this._text} onChange={this.onTextChange}/>
+          {/* <pre>
+            {JSON.stringify(this._userExtra, null, 2)}
+          </pre> */}
+          <TextArea rows={10} value={this.state.text} onChange={this.onTextChange}/>
           <Button onClick={this.saveText}>Save</Button>
         </div>
       </TokenizedPage>

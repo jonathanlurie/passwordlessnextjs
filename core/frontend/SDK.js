@@ -31,8 +31,12 @@ export default class SDK {
     const res = await fetch('/api/refresh')
     const json = await res.json()
 
-    if (json.error && raiseError) {
-      throw new ErrorWithCode(getMessageFromCode(json.error), json.error)
+    if (json.error) {
+      if (raiseError) {
+        throw new ErrorWithCode(getMessageFromCode(json.error), json.error)
+      } else {
+        return null
+      }
     }
 
     if (json.data) {
@@ -57,6 +61,27 @@ export default class SDK {
     })
 
     // console.log('DEBUG: ', await res.clone().text())
+    const json = await res.json()
+    return json
+  }
+
+
+  static async postUserExtra(userExtra) {
+    const accessToken = AccessToken.get()
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`
+    }
+
+    const res = await fetch('/api/userextra', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(userExtra)
+    })
+
     const json = await res.json()
     return json
   }

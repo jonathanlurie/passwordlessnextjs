@@ -188,5 +188,13 @@ export default class DB {
   }
 
 
+  static async setUserExtraDataById(userId, userExtra) {
+    if (userId === undefined || userId === null) {
+      return false
+    }
+    const stores = getStores()
+    await stores.userExtras.put(userId, userExtra)
+    return true
+  }
 
 }

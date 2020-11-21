@@ -65,7 +65,14 @@ const ERRORS = {
     code: 15,
     message: 'The format of the email or username is incorrect.'
   },
-  
+  MISSING_DATA_FOR_UPDATING: {
+    code: 16,
+    message: 'Update cannot be performed because there is no data to update with.'
+  },
+  WRONG_DATA_FORMAT: {
+    code: 17,
+    message: 'The data is in an unexpected format.'
+  }
 }
 
 
