@@ -1,0 +1,37 @@
+.app-header {
+  background: #40a9fe;
+  padding: 0;
+  /* padding-left: 50px;
+  padding-right: 50px; */
+}
+
+
+.title-passwordless {
+  color: white;
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.title-nextjs {
+  color: white;
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 100;
+}
+
+
+.app-footer {
+  background: #40a9fe;
+  padding: 10px 0px;
+  /* margin-top: 4em; */
+  font-size: 1em;
+  color: #00000080;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  /* padding-left: 50px;
+  padding-right: 50px; */
+}

@@ -32,6 +32,7 @@ export default class TokenizedPage extends React.Component {
         this.props.onReady()
       }
     }
+    
   }
 
 
