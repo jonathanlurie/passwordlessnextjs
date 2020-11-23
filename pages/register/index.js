@@ -1,7 +1,10 @@
 import React from 'react'
-import { Input, Button} from 'antd'
+import Link from 'next/link'
+import { Input, Button, Modal, Tooltip, Space } from 'antd'
+import { CheckCircleOutlined } from '@ant-design/icons'
 import Tools from '../../core/fullstack/Tools'
 import SDK from '../../core/frontend/SDK'
+import Styles from './styles.module.css'
 
 export default class RegisterPage extends React.Component {
   constructor(props) {
@@ -105,7 +108,7 @@ export default class RegisterPage extends React.Component {
     if (resObj.error) {
       this.setState({successMessage: resObj.error})
     } else {
-      this.setState({successMessage: 'Check you inbox! We just sent you a link to connect :)'})
+      this.setState({successMessage: 'Check you inbox! We just sent you a link to connect.'})
     }
   }
 
@@ -132,24 +135,60 @@ export default class RegisterPage extends React.Component {
 
   render() {
     return (
-      <div>
-        <Input placeholder='E-mail' onChange={this.onEmailChange}/>
-        <p>
-          {this.state.messageEmail}
-        </p>
-
-        <Input placeholder='Username' onChange={this.onUsernameChange}/>
-        <p>
-          {this.state.messageUsername}
-        </p>
       
-        <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" onClick={this.onSubmit}>
-          Signup
-        </Button>
 
-        {this.state.successMessage ? <p>{this.state.successMessage}</p> : null}
+
+      <Modal
+        title={
+          <div
+            className={Styles['header']}
+          >
+            <Link href='/'><a>
+              <span className={Styles['title-passwordless']}>Passwordless</span>
+              <span className={Styles['title-nextjs']}>Nextjs</span>
+            </a></Link>
+          </div>
+        }
+        visible={true}
+        closable={false}
+        // centered
+        maskClosable={false}
+        keyboard={false}
+        mask={true}
+        maskStyle={{
+          background: '#40a9fe'
+        }}
+        footer={null}
+      >
         
-      </div>
+        {
+          this.state.successMessage
+          ?
+          <div className={Styles['success-message']}>
+            <p>
+              {this.state.successMessage}
+            </p>
+            <CheckCircleOutlined className={Styles['success-icon']}/>
+          </div>
+          :
+          <Space direction='vertical' className={Styles['main']}>
+          
+            <Tooltip color='volcano' placement='right' visible={!!this.state.messageUsername} title={this.state.messageUsername}>
+              <Input placeholder='Username' onChange={this.onUsernameChange}/>
+            </Tooltip>
+            
+            <Tooltip color='volcano' placement='right' visible={!!this.state.messageEmail} title={this.state.messageEmail}>
+              <Input placeholder='E-mail' onChange={this.onEmailChange}/>
+            </Tooltip>
+
+            <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" onClick={this.onSubmit} block>
+              Register
+            </Button>
+          
+          </Space>
+        }
+
+      </Modal>
     )
   }
 }

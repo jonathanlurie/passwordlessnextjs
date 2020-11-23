@@ -1,6 +1,5 @@
 import React from 'react'
 import { Input, Button} from 'antd'
-import Tools from '../../core/fullstack/Tools'
 import SDK from '../../core/frontend/SDK'
 
 export default class LoginPage extends React.Component {
