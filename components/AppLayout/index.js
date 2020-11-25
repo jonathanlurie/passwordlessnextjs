@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout, Row, Col } from 'antd'
-import LoginLogoutButton from '../LoginLogoutButton'
+import StatusButton from '../StatusButton'
 import Styles from './styles.module.css'
 
 const { Header, Footer, Content } = Layout
@@ -30,7 +30,7 @@ export default class AppLayout extends React.Component {
               </Col>
 
               <Col>
-                <LoginLogoutButton/>
+                <StatusButton/>
               </Col>
             </Row>
           </Col>

@@ -1,9 +1,12 @@
 .login-register-button {
   color: white;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1em;
 }
 
 
-.login-register-button a:hover {
+.login-register-button span:hover {
   color: #103b5f;
 }
 

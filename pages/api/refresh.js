@@ -42,6 +42,8 @@ const handler = nc()
       return res.json({ error: ErrorCodes.REFRESH_INVALID_TOKEN.code, data: null})
     }
 
+    console.log('refreshTokenInfo', refreshTokenInfo)
+
     // From this point, we know we have a valid token. Though, the username and
     // email may be no longer in the DB.
     const username = refreshTokenInfo.data.username

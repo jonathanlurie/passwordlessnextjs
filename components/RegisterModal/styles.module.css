@@ -1,0 +1,49 @@
+.footer {
+  text-align: center;
+}
+
+.header {
+  text-align: center;
+  padding: 1em 0 0.5em 0px;
+}
+
+.main {
+  width: 100%;
+}
+
+.title-passwordless {
+  color: #40a9fe;
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.title-nextjs {
+  color: #40a9fe;
+  text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 100;
+}
+
+.success-message {
+  text-align: center;
+  font-size: 1.2em;
+  color: #777777;
+}
+
+.success-icon {
+  color: #16d016;
+  font-size: 2em;
+}
+
+.cancel-button {
+  text-align: center;
+  color: #00000066;
+  cursor: pointer;
+  transition: all 0.2;
+  user-select: none;
+}
+
+.cancel-button:hover {
+  color: #40a9fe;
+}

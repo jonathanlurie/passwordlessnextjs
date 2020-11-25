@@ -21,9 +21,8 @@ export default class TokenizedPage extends React.Component {
     // trying to fetch the access token. If success, it is put somewhere safe
     // by the SDK (no need to get it from here)
     const tokenInfo = await SDK.refreshToken()
-    console.log('TokenizedPage ready!')
     
-    if (tokenInfo.error && this.props.redirectOnFailedLogin) {
+    if (!tokenInfo && this.props.redirectOnFailedLogin) {
       Router.push( this.props.redirectOnFailedLogin === true ? '/' : this.props.redirectOnFailedLogin)
     } else {
       this.setState({ready: true})

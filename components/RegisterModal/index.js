@@ -6,9 +6,10 @@ import Tools from '../../core/fullstack/Tools'
 import SDK from '../../core/frontend/SDK'
 import Styles from './styles.module.css'
 
-export default class RegisterPage extends React.Component {
+export default class RegisterModal extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       validEmail: false,
       validUsername: false,
@@ -44,17 +45,10 @@ export default class RegisterPage extends React.Component {
           return this.setState({messageEmail: 'This email is already taken', validEmail})
         }
 
-        this.setState({messageEmail: null, validEmail: true})
         this._hasEmailUpdated = false
+        this.setState({messageEmail: null, validEmail: true})
       }
     }, 500)
-
-
-
-
-
-
-
 
 
 
@@ -150,13 +144,16 @@ export default class RegisterPage extends React.Component {
         visible={true}
         closable={false}
         // centered
-        maskClosable={false}
+        maskClosable={true}
+        onCancel={this.props.onCancel}
         keyboard={false}
         mask={true}
         maskStyle={{
           background: '#40a9fe'
         }}
-        footer={null}
+        footer={
+          <div className={Styles['cancel-button']} onClick={this.props.onCancel}>cancel</div>
+        }
       >
         
         {

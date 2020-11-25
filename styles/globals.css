@@ -14,3 +14,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+
+/* Overloading some Ant Design rules */
+
+.ant-tooltip {
+  max-width: 350px;
+}
