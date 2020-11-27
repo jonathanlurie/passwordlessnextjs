@@ -6,16 +6,8 @@ import AppLayout from '../components/AppLayout'
 export default function Home() {
   return (
     <TokenizedPage>
-      <Head>
-        <title>Passwordless NextJS</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <AppLayout>
-        
       </AppLayout>
-
-
     </TokenizedPage>
   )
 }

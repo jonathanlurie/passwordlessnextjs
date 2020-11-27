@@ -90,7 +90,8 @@ export default class SDK {
   static async logout(redirectUrl = '/') {
     AccessToken.set(null)
     const res = await fetch('/api/logout')
-    Router.push(redirectUrl)
+    // using this instead of Router.push forces a reload of the page
+    window.location.href = redirectUrl
   }
 
 }
