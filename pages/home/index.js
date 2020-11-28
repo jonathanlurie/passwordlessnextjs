@@ -3,6 +3,8 @@ import { Input, Button } from 'antd'
 import SDK from '../../core/frontend/SDK'
 import LogoutButton from '../../components/LogoutButton'
 import TokenizedPage from '../../components/TokenizedPage'
+import AppLayout from '../../components/AppLayout'
+import Styles from './styles.module.css'
 const { TextArea } = Input
 
 
@@ -72,14 +74,16 @@ export default class HomePage extends React.Component {
   render() {
     return (
       <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
+        <AppLayout>
         <div>
-          <LogoutButton/>
+          {/* <LogoutButton/> */}
           {/* <pre>
             {JSON.stringify(this._userExtra, null, 2)}
           </pre> */}
           <TextArea rows={10} value={this.state.text} onChange={this.onTextChange}/>
           <Button onClick={this.saveText}>Save</Button>
         </div>
+        </AppLayout>
       </TokenizedPage>
     )
   }

@@ -13,7 +13,9 @@ export default class AppLayout extends React.Component {
 
   render() {
     return (
-      <Layout>
+      <Layout
+        className={Styles['layout']}
+      >
         <Header
           className={Styles['app-header']}
         >
