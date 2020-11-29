@@ -39,7 +39,6 @@ export default class TokenizedPage extends React.Component {
 
   render() {
     const ready = this.state.ready
-    console.log('this.props.children', this.props.children)
     return (
       <div>
         {ready ? this.props.children : null}

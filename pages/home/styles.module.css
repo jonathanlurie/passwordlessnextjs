@@ -1,0 +1,23 @@
+.spacer {
+  width: 100%;
+}
+
+.simple-input {
+  font-size: 1.75em;
+  color: #40a9fe;
+}
+
+
+
+.simple-input input {
+  font-size: 1em;
+  color: #5e5e5e;
+  font-weight: 300;
+}
+
+.text-area {
+  font-family: serif;
+  font-size: 1.5em;
+  color: #5e5e5e;
+  margin: 1em 0;
+}

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Input, Button } from 'antd'
+import { Input, Button, message, Space } from 'antd'
+import { UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } from '@ant-design/icons'
 import SDK from '../../core/frontend/SDK'
 import LogoutButton from '../../components/LogoutButton'
 import TokenizedPage from '../../components/TokenizedPage'
@@ -12,7 +13,13 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      text: '',
+      text: null,
+      displayName: null,
+      twitter: null,
+      instagram: null,
+      github: null,
+      website: null,
+      photo: null,
     }
 
     this._userExtra = null
@@ -33,13 +40,13 @@ export default class HomePage extends React.Component {
       userExtraInfo = await SDK.getUserExtra()
     } catch(e) {
       // TODO: deal with this error
-      console.log('error 1')
+      console.log('error 1', e)
       return
     }
 
     if (userExtraInfo.error) {
       // TODO: deal with the error
-      console.log('error 2')
+      console.log('error 2', e)
       return
     }
 
@@ -51,7 +58,7 @@ export default class HomePage extends React.Component {
 
     if (this._userExtra.text) {
       this.setState({
-        text: this._userExtra.text
+        ...this._userExtra
       })
     }
   }
@@ -59,15 +66,61 @@ export default class HomePage extends React.Component {
 
   onTextChange = (e) => {
     this.setState({
-      text: e.target.value
+      text: e.target.value,
     })
   }
 
 
-  saveText = async () => {
-    this._userExtra.text = this.state.text
+  onDisplayNameChange = (e) => {
+    this.setState({
+      displayName: e.target.value,
+    })
+  }
+
+
+
+  onWebsiteChange = (e) => {
+    this.setState({
+      website: e.target.value,
+    })
+  }
+
+
+  onTwitterUsernameChange = (e) => {
+    this.setState({
+      twitterUsername: e.target.value,
+    })
+  }
+  
+
+  onInstagramUsernameChange = (e) => {
+    this.setState({
+      instagramUsername: e.target.value,
+    })
+  }
+  
+  onGithubUsernameChange= (e) => {
+    this.setState({
+      githubUsername: e.target.value,
+    })
+  }
+  
+
+  save = async () => {
+    this._userExtra = {...this.state}
     const response = await SDK.postUserExtra(this._userExtra)
     console.log('response: ', response)
+    if (response.error) {
+      message.error('Failed to save!')
+    } else {
+      message.success('Saved!')
+    }
+  }
+
+  cancel = () => {
+    this.setState({
+      ...this._userExtra,
+    })
   }
 
 
@@ -75,14 +128,29 @@ export default class HomePage extends React.Component {
     return (
       <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
         <AppLayout>
-        <div>
-          {/* <LogoutButton/> */}
-          {/* <pre>
-            {JSON.stringify(this._userExtra, null, 2)}
-          </pre> */}
-          <TextArea rows={10} value={this.state.text} onChange={this.onTextChange}/>
-          <Button onClick={this.saveText}>Save</Button>
-        </div>
+        <Space direction='vertical' className={Styles['spacer']}>
+            {/* <LogoutButton/> */}
+            {/* <pre>
+              {JSON.stringify(this._userExtra, null, 2)}
+            </pre> */}
+            <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Display name' value={this.state.displayName} onChange={this.onDisplayNameChange} prefix={<UserOutlined />} />
+
+            <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Website URL' value={this.state.website} onChange={this.onWebsiteChange} prefix={<GlobalOutlined />} />
+
+            <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Twitter username' value={this.state.twitterUsername} onChange={this.onTwitterUsernameChange} prefix={<TwitterOutlined />} />
+
+            <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Instagram username' value={this.state.instagramUsername} onChange={this.onInstagramUsernameChange} prefix={<InstagramOutlined />} />
+
+            <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Github username' value={this.state.githubUsername} onChange={this.onGithubUsernameChange} prefix={<GithubOutlined />} />
+
+
+            <TextArea className={Styles['text-area']} rows={10} placeholder='What about you?' value={this.state.text} onChange={this.onTextChange}/>
+
+            <Space>
+              <Button type='primary' onClick={this.save} >Save</Button>
+              <Button type='primary' onClick={this.cancel} >Cancel</Button>
+            </Space>
+          </Space>
         </AppLayout>
       </TokenizedPage>
     )
