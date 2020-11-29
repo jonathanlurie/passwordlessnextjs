@@ -59,7 +59,7 @@ export default class AppLayout extends React.Component {
         <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
           <Col xs={20} sm={20} md={16} lg={16} xl={16}>
-              Footer
+              Made by <a href='https://twitter.com/jonathanlurie'>@jonathanlurie</a> - Project source available on <a href='https://github.com/jonathanlurie/passwordlessnextjs'>GitHub</a>.
           </Col>
           <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
