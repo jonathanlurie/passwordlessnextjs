@@ -1,6 +1,6 @@
 import React from 'react'
-import { Input, Button, message, Space } from 'antd'
-import { UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } from '@ant-design/icons'
+import { Input, Button, message, Space, Avatar } from 'antd'
+import { UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
 import SDK from '../../core/frontend/SDK'
 import LogoutButton from '../../components/LogoutButton'
 import TokenizedPage from '../../components/TokenizedPage'
@@ -13,6 +13,7 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      picture: null,
       text: null,
       displayName: null,
       twitter: null,
@@ -104,7 +105,43 @@ export default class HomePage extends React.Component {
       githubUsername: e.target.value,
     })
   }
+
+
+  onFileSelected = (evt) => {
+    let f = evt.target.files[0]
+
+    if (f.type !== 'image/jpeg' && f.type !== 'image/png') {
+      message.error('Only jpeg and png format are accepted')
+      return
+    }
+
+    const maxByteSize = 2**20
+    if (f.size > maxByteSize) {
+      message.error('The image must be less than 1MB')
+      return
+    }
+    const reader = new FileReader()
   
+    reader.onload = (e) => {
+      this.setState({picture: e.target.result})
+    }
+  
+    reader.readAsDataURL(f)
+  }
+  
+
+
+  deletePicture = () => {
+    this.setState({picture: null})
+  }
+
+
+  addPicture = () => {
+    const input = document.createElement('input')
+    input.type='file'
+    input.onchange = this.onFileSelected
+    input.click()
+  }
 
   save = async () => {
     this._userExtra = {...this.state}
@@ -125,6 +162,7 @@ export default class HomePage extends React.Component {
 
 
   render() {
+    const pictureSize = 200
     return (
       <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
         <AppLayout>
@@ -133,6 +171,26 @@ export default class HomePage extends React.Component {
             {/* <pre>
               {JSON.stringify(this._userExtra, null, 2)}
             </pre> */}
+            
+            
+            <Space>
+              {
+                this.state.picture ?
+                <img className={Styles['profile-picture']} src={this.state.picture} height={pictureSize}/> :
+                <Avatar size={pictureSize} icon={<UserOutlined />} />
+              }
+              
+              <Button type="primary" shape="circle" icon={<CloudUploadOutlined />} onClick={this.addPicture}/>
+
+              {
+                this.state.picture ?
+                <Button type="danger" shape="circle" icon={<DeleteOutlined />} onClick={this.deletePicture}/> :
+                null
+              }
+            
+            {/* <input type='file' onChange={this.onFileSelected}/> */}
+            </Space>
+
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Display name' value={this.state.displayName} onChange={this.onDisplayNameChange} prefix={<UserOutlined />} />
 
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Website URL' value={this.state.website} onChange={this.onWebsiteChange} prefix={<GlobalOutlined />} />

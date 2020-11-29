@@ -1,5 +1,6 @@
 .spacer {
   width: 100%;
+  margin: 30px 0;
 }
 
 .simple-input {
@@ -20,4 +21,8 @@
   font-size: 1.5em;
   color: #5e5e5e;
   margin: 1em 0;
+}
+
+.profile-picture {
+  border-radius: 50%;
 }
