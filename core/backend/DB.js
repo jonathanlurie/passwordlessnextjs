@@ -56,6 +56,14 @@ function getStores() {
       {
         compression: true, 
       })
+
+      DB.createAdmin()
+      .then(() => {
+        console.log('INFO: admin user created')
+      })
+      .catch((e) => {
+        console.log('ERROR: admin user creation failed')
+      })
   }
 
   return _stores
@@ -132,7 +140,7 @@ export default class DB {
   }
 
   
-  static async createUser(email, username) {
+  static async createUser(email, username, admin = false) {
     if (username === undefined
     || username === null
     || email === undefined
@@ -159,6 +167,7 @@ export default class DB {
       username,
       creationDate: Date.now(),
       lastConnectionDate: null,
+      admin,
     })
 
     // create the entry for email lookup
@@ -171,6 +180,15 @@ export default class DB {
     await stores.userExtras.put(userId, '')
   }
 
+
+  static async createAdmin() {
+    const adminUsername = process.env.ADMIN_USERNAME
+    const adminEmail = process.env.ADMIN_EMAIL
+
+    if (!DB.hasUserFromUsername(adminUsername)) {
+      await DB.createUser(adminEmail, adminUsername, true)
+    }
+  }
 
 
   static getUserExtraDataById(userId) {
