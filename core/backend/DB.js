@@ -59,7 +59,7 @@ function getStores() {
 
       DB.createAdmin()
       .then(() => {
-        console.log('INFO: admin user created')
+        
       })
       .catch((e) => {
         console.log('ERROR: admin user creation failed')
@@ -186,7 +186,10 @@ export default class DB {
     const adminEmail = process.env.ADMIN_EMAIL
 
     if (!DB.hasUserFromUsername(adminUsername)) {
+      console.log('Creating the admin user')
       await DB.createUser(adminEmail, adminUsername, true)
+    } else {
+      console.log('The admin user already exists')
     }
   }
 

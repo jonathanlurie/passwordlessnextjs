@@ -1,5 +1,6 @@
 let _accessToken = null
 
+
 export default class AccessToken {
   static get() {
     return _accessToken
@@ -8,6 +9,17 @@ export default class AccessToken {
 
   static set(t) {
     _accessToken = t
+  }
+
+
+  static getLifespan(){
+    const data = AccessToken.getData()
+
+    if (data === null) {
+      return null
+    }
+
+    return data.exp - data.iat
   }
 
 

@@ -1,4 +1,5 @@
 import cookie from 'cookie'
+import { v4 as uuidv4 } from 'uuid'
 
 // a middleware to add a uuid that represent a specific visitor.
 // This is added to the cookie (encrypted)

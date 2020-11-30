@@ -4,6 +4,7 @@ import { getMessageFromCode } from '../fullstack/ErrorCodes'
 import ErrorWithCode from '../fullstack/ErrorWithCode'
 
 
+let refreshIntervalId = null
 export default class SDK {
 
   static async hasEmail(email) {
@@ -41,6 +42,14 @@ export default class SDK {
 
     if (json.data) {
       AccessToken.set(json.data)
+
+      // logic to refresh the token but 
+      const lifespan = AccessToken.getLifespan()
+      const renewEveryMs = Math.round(lifespan * 0.5) * 1000
+      clearInterval(refreshIntervalId)
+      refreshIntervalId = setInterval(() => {
+        SDK.refreshToken()
+      }, renewEveryMs)
     }
 
     return json

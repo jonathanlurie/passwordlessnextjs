@@ -57,11 +57,9 @@ export default class HomePage extends React.Component {
       this._userExtra = {}
     }
 
-    if (this._userExtra.text) {
-      this.setState({
-        ...this._userExtra
-      })
-    }
+    this.setState({
+      ...this._userExtra
+    })
   }
 
 
