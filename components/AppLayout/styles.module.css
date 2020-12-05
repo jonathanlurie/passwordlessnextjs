@@ -2,6 +2,7 @@
   background: #fff;;
   position: relative;
   padding-bottom: 100px;
+  min-height: 100vh;
 }
 
 .app-header {
