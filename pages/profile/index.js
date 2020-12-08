@@ -5,6 +5,7 @@ import SDK from '../../core/frontend/SDK'
 import LogoutButton from '../../components/LogoutButton'
 import TokenizedPage from '../../components/TokenizedPage'
 import AppLayout from '../../components/AppLayout'
+import ProfilePicture from '../../components/ProfilePicture'
 import Styles from './styles.module.css'
 const { TextArea } = Input
 
@@ -16,9 +17,9 @@ export default class HomePage extends React.Component {
       picture: null,
       text: null,
       displayName: null,
-      twitter: null,
-      instagram: null,
-      github: null,
+      twitterUsername: null,
+      instagramUsername: null,
+      githubUsername: null,
       website: null,
       photo: null,
     }
@@ -144,7 +145,6 @@ export default class HomePage extends React.Component {
   save = async () => {
     this._userExtra = {...this.state}
     const response = await SDK.postUserExtra(this._userExtra)
-    console.log('response: ', response)
     if (response.error) {
       message.error('Failed to save!')
     } else {
@@ -172,12 +172,7 @@ export default class HomePage extends React.Component {
             
             
             <Space>
-              {
-                this.state.picture ?
-                <img className={Styles['profile-picture']} src={this.state.picture} height={pictureSize}/> :
-                <Avatar size={pictureSize} icon={<UserOutlined />} />
-              }
-              
+            <ProfilePicture img={this.state.picture} />
               <Button type="primary" shape="circle" icon={<CloudUploadOutlined />} onClick={this.addPicture}/>
 
               {

@@ -1,12 +1,16 @@
 import React from 'react'
 import { withRouter } from 'next/router'
+import Marked from 'marked'
+import DOMPurify from 'dompurify'
+import { JSDOM } from 'jsdom'
 import DB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
-import { Input, Button, message, Space, Avatar } from 'antd'
-import { FrownOutlined, UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
+import { Button, Input, Space, Col, Row, Divider } from 'antd'
+import { FrownOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
 import SDK from '../../core/frontend/SDK'
 import TokenizedPage from '../../components/TokenizedPage'
 import AppLayout from '../../components/AppLayout'
+import ProfilePicture from '../../components/ProfilePicture'
 import Styles from './styles.module.css'
 const { TextArea } = Input
 
@@ -15,6 +19,7 @@ class UserPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this._htmlDivRef = React.createRef()
   }
 
 
@@ -24,8 +29,6 @@ class UserPage extends React.Component {
     const data = this.props.data
     const error = this.props.error
     const pictureSize = 200
-    console.log(this.props)
-
     let content = null
 
     if (error) {
@@ -42,25 +45,72 @@ class UserPage extends React.Component {
         </Space>
       )
     } else {
+
       content = (
-        <Space direction='vertical' className={Styles['spacer']}>
-          {
-            data.picture ?
-            <img className={Styles['profile-picture']} src={data.picture} height={pictureSize}/> :
-            <Avatar size={pictureSize} icon={<UserOutlined />} />
-          }
+        <div className={Styles['content']}>
+          <Row gutter={[8, 8]} justify='center'>
+            <Col>
+              <ProfilePicture img={data.picture} />
+            </Col>
+          </Row>
 
-        <h1>{data.displayName ? data.displayName : data.username}</h1>
-        <h2>{`@${data.username}`}</h2>
+          <Row justify='center'>
+            <Col className={Styles['display-name']}>
+              {data.displayName ? data.displayName : data.username}
+            </Col>
+            
+          </Row>
+          <Row justify='center'>
+            <Col className={Styles['username']}>
+              {`@${data.username}`}
+            </Col>
+          </Row>
+          <Divider>
+            <Space>
+              {
+                data.instagramUsername
+                ?
+                <Button type='primary' size='small' shape="circle" icon={<InstagramOutlined />} href={`https://instagram.com/${data.instagramUsername}`}/>
+                :
+                null
+              }
 
-        
-        </Space>
+              {
+                data.githubUsername
+                ?
+                <Button type='primary' size='small' shape="circle" icon={<GithubOutlined />} href={`https://github.com/${data.githubUsername}`}/>
+                :
+                null
+              }
+
+              {
+                data.twitterUsername
+                ?
+                <Button type='primary' size='small' shape="circle" icon={<TwitterOutlined />} href={`https://twitter.com/${data.twitterUsername}`}/>
+                :
+                null
+              }
+
+              {
+                data.website
+                ?
+                <Button type='primary' size='small' shape="circle" icon={<GlobalOutlined />} href={data.website}/>
+                :
+                null
+              }
+            </Space>
+          </Divider>
+          <div
+              className={Styles['long-text']}
+              ref={this._htmlDivRef} dangerouslySetInnerHTML={{ __html: data.text }}
+            />
+        </div>
       )
     }
 
 
     return (
-      <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
+      <TokenizedPage>
         <AppLayout>
           
             {content}
@@ -75,7 +125,6 @@ class UserPage extends React.Component {
 export async function getServerSideProps(context) {
   const urlQuery = context.query
   let username = urlQuery.username
-  console.log('username', username)
 
   // if the username does not start with @, then redurect to same page
   // but with @ prepended
@@ -114,6 +163,12 @@ export async function getServerSideProps(context) {
 
   const userExtra = DB.getUserExtraDataById(user.userId)
 
+  // convert markdown to html on server side
+  // in order to benefit from SEO if necessary.
+  // If SEO doe not matter, it's probably better to do it all
+  // on client and not use getServerSideProps at all.
+  userExtra.text = mdToHtml(userExtra.text)
+
   return {
     props: {
       error: null,
@@ -124,6 +179,14 @@ export async function getServerSideProps(context) {
     },
   }
 }
+
+
+function mdToHtml(md) {
+  const { window } = new JSDOM('<!DOCTYPE html>')
+  const domPurify = DOMPurify(window)
+  return domPurify.sanitize(Marked(md), { ADD_TAGS: ["iframe"] })
+}
+
 
 
 

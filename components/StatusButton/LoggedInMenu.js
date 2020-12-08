@@ -8,7 +8,7 @@ import {
 import {
   DownOutlined,
   UserOutlined,
-  HomeOutlined,
+  SettingOutlined,
   PoweroffOutlined,
   ShareAltOutlined,
   FrownOutlined,
@@ -45,8 +45,8 @@ export default class LoggedInMenu extends React.Component {
         <Menu.Item
           key='1'
         >
-          <Link href='/home'><a>
-          <HomeOutlined/> Home
+          <Link href='/profile'><a>
+          <SettingOutlined/> Edit profile
           </a></Link>
           
         </Menu.Item>

@@ -69,7 +69,6 @@ export default class SDK {
       headers,
     })
 
-    // console.log('DEBUG: ', await res.clone().text())
     const json = await res.json()
     return json
   }

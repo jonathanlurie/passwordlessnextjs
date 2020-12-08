@@ -68,7 +68,7 @@ const handler = nc()
     // the home page can display a little baner message to welcome
     // the new visitor.
     res.statusCode = 302
-    return res.redirect(`/home`)
+    return res.redirect(`/`)
   })
 
 

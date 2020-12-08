@@ -8,3 +8,23 @@
   font-size: 2em;
   color: rgb(141, 141, 141);
 }
+
+.content {
+  margin: 30px;
+}
+
+.display-name {
+  font-size: 2em;
+  color: #6b6b6b;
+}
+
+.username {
+  font-size: 1.1em;
+  color: #0077e4;
+}
+
+.long-text {
+  font-family: serif;
+  font-size: 1.5em;
+  color: #5e5e5e;
+}

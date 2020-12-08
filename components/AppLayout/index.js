@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { Layout, Row, Col } from 'antd'
 import StatusButton from '../StatusButton'
 import Styles from './styles.module.css'
@@ -27,8 +28,11 @@ export default class AppLayout extends React.Component {
               
             <Row justify="space-between">
               <Col>
+              
+                <Link href='/'><a>
                 <span className={Styles['title-passwordless']}>Passwordless</span>
                 <span className={Styles['title-nextjs']}>Nextjs</span>
+                </a></Link>
               </Col>
 
               <Col>

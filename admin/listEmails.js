@@ -41,8 +41,6 @@ async function put() {
     compression: true, 
   })
 
-  // console.log(db);
-
   await subDB.put('someKey', 'someValue')
 
 }
@@ -61,8 +59,6 @@ async function get() {
   {
     compression: true, 
   })
-
-  // console.log(db);
 
   const value = subDB.get('someKey')
   console.log(value)
