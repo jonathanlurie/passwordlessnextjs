@@ -31,3 +31,7 @@
 .profile-picture {
   border-radius: 50%;
 }
+
+.codemirror-wrapper {
+  border: solid 1px #ddd;
+}

@@ -1,6 +1,14 @@
 import React from 'react'
 import { Input, Button, message, Space, Avatar } from 'antd'
 import { UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
+
+// codeMirror uses references to 'navigator' so we use Dynamics to make sure
+// the dependency is pulled only on client side.
+import dynamic from 'next/dynamic'
+const CodeMirror = dynamic(() => import('../../components/ReactCodeMirror'), {
+  ssr: false
+})
+
 import SDK from '../../core/frontend/SDK'
 import LogoutButton from '../../components/LogoutButton'
 import TokenizedPage from '../../components/TokenizedPage'
@@ -67,6 +75,13 @@ export default class HomePage extends React.Component {
   onTextChange = (e) => {
     this.setState({
       text: e.target.value,
+    })
+  }
+
+  onTextChange2 = (codeMirrorInstance, changes) => {    
+    // this._editText = codeMirrorInstance.getValue()
+    this.setState({
+      text: codeMirrorInstance.getValue(),
     })
   }
 
@@ -194,8 +209,24 @@ export default class HomePage extends React.Component {
 
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Github username' value={this.state.githubUsername} onChange={this.onGithubUsernameChange} prefix={<GithubOutlined />} />
 
+            <div
+              className={Styles['codemirror-wrapper']}
+            >
+              <CodeMirror
+                height="65vh"
+                value={this.state.text}
+                onChange={this.onTextChange2}
+                options={{
+                  tabSize: 2,
+                  mode: 'markdown',
+                  lineWrapping: true,
+                  autofocus: true,
+                  placeholder: 'PasswordlessNextjs is Markdown-friendly!'
+                }}
+              />
+            </div>
 
-            <TextArea className={Styles['text-area']} rows={10} placeholder='What about you?' value={this.state.text} onChange={this.onTextChange}/>
+            {/* <TextArea className={Styles['text-area']} rows={10} placeholder='What about you?' value={this.state.text} onChange={this.onTextChange}/> */}
 
             <Space>
               <Button type='primary' onClick={this.save} >Save</Button>
