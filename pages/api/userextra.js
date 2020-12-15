@@ -12,37 +12,25 @@ import nc from 'next-connect'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 
 
+
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
   .use(accessToken)
   .get(async (req, res) => {
-    const email = req.accessTokenData.email
-    const username = req.accessTokenData.username
-    let user = DB.getUserFromEmail(email) || DB.getUserFromUsername(username)
-
-    if (!user) {
-      res.statusCode = 401
-      return res.json({data: null, error: ErrorCodes.USER_NOT_EXISTING.code})
-    }
-
-
-    const userExtra = DB.getUserExtraDataById(user.userId)
+    // The user data has been already fetched using the access token
+    // by the 'accessToken' middleware.
+    // It is available at req.user
 
     res.statusCode = 200
-    return res.json({data: userExtra, error: null})
+    return res.json({data: res.user.strip(), error: null})
   })
 
 
   .post(async (req, res) => {
-    const email = req.accessTokenData.email
-    const username = req.accessTokenData.username
-    let user = DB.getUserFromEmail(email) || DB.getUserFromUsername(username)
-
-    if (!user) {
-      res.statusCode = 401
-      return res.json({data: null, error: ErrorCodes.USER_NOT_EXISTING.code})
-    }
+    // The user data has been already fetched using the access token
+    // by the 'accessToken' middleware.
+    // It is available at req.user
 
     if (!req.body) {
       res.statusCode = 417
@@ -54,7 +42,13 @@ const handler = nc()
       return res.json({data: null, error: ErrorCodes.WRONG_DATA_FORMAT.code})
     }
 
-    DB.setUserExtraDataById(user.userId, req.body)
+    try {
+      req.user.updateSafe(req.body)
+    } catch (e) {
+      res.statusCode = 500
+      console.log(e)
+      return res.json({data: 'Data updated', error: e.message})
+    }
 
     res.statusCode = 200
     return res.json({data: 'Data updated', error: null})

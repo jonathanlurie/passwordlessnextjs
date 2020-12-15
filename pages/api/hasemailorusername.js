@@ -1,7 +1,9 @@
-import DB from '../../core/backend/DB'
+// import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
+import User from '../../core/backend/DB/models/User'
+import Tools from '../../core/fullstack/Tools'
 
 /**
  * Endpoint: /api/hasemail
@@ -11,23 +13,40 @@ import nc from 'next-connect'
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
-  .get((req, res) => {
+  .get( async (req, res) => {
 
     if (!('emailorusername' in req.query)) {
       res.statusCode = 404
       return res.json({ found: false })
     }
 
-    const hasFromEmail = DB.hasUserFromEmail(req.query.emailorusername)
-    const hasFromUsername = DB.hasUserFromUsername(req.query.emailorusername)
+    const emailOrUsername = req.query.emailorusername
 
-    if (hasFromEmail || hasFromUsername) {
-      res.statusCode = 200
-      res.json({ found: true })
-    } else {
+    // Username cannot contain '@' so if it does, we only test with email
+    if (Tools.isEmail(emailOrUsername)) {
+      const user = await User.findByEmail(emailOrUsername)
+      if (user) {
+        res.statusCode = 200
+        return res.json({ found: true })
+      }
       res.statusCode = 404
-      res.json({ found: false })
+      return res.json({ found: false })
     }
+
+    // taking a shortcut here
+    if (!Tools.isUsername(emailOrUsername)) {
+      res.statusCode = 404
+      return res.json({ found: false })
+    }
+
+    const user = await User.findByUsername(emailOrUsername)
+    if (user) {
+      res.statusCode = 200
+      return res.json({ found: true })
+    }
+
+    res.statusCode = 404
+    res.json({ found: false })
   })
 
 

@@ -8,17 +8,18 @@
 
 import cookie from 'cookie'
 import nc from 'next-connect'
-import DB from '../../core/backend/DB'
+// import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import JWT from '../../core/backend/JWT'
+import User from '../../core/backend/DB/models/User'
 
 
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
-  .get((req, res) => {
+  .get( async (req, res) => {
 
     // looking for the refresh token from the cookies
     let refresh_token = null
@@ -47,12 +48,12 @@ const handler = nc()
     const username = refreshTokenInfo.data.username
     const email = refreshTokenInfo.data.email
 
-    if (!DB.hasUserFromEmail(email)) {
+    if (! (await User.getByEmail(email))) {
       res.statusCode = 404
       res.json({ error: ErrorCodes.EMAIL_NOT_EXISTING.code, data: null})
     }
 
-    if (!DB.hasUserFromUsername(username)) {
+    if (! (await User.getByUsername(username))) {
       res.statusCode = 404
       res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING.code, data: null})
     }

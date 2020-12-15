@@ -6,12 +6,13 @@
 
 
 import cookie from 'cookie'
-import DB from '../../core/backend/DB'
+// import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import JWT from '../../core/backend/JWT'
+import User from '../../core/backend/DB/models/User'
 
 
 const handler = nc()
@@ -44,7 +45,8 @@ const handler = nc()
     // the DB registration will check if the user already exists.
     // This could be the case if the user has already used this token
     try {
-      await DB.createUser(email, username)
+      const user = new User({email, username})
+      await user.save()
     } catch (e) { // e is of type ErrorWithCode
       console.log(e)
       res.statusCode = 302

@@ -1,9 +1,11 @@
 import nc from 'next-connect'
-import DB from '../../core/backend/DB'
+// import DB from '../../core/backend/DB'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import Email from '../../core/backend/Email'
+import User from '../../core/backend/DB/models/User'
+
 
 /**
  * Endpoint: POST /api/sendloginlink with body 'email' and 'username' (JSON encoded)
@@ -23,7 +25,7 @@ const handler = nc()
       return res.redirect(`/failedlogin?error=${ErrorCodes.CREDENTIALS_NOT_PROVIDED.code}`)
     }
     // if the first function returns non null, the second is not called
-    let user = DB.getUserFromEmail(emailOrUsername) || DB.getUserFromUsername(emailOrUsername)
+    let user = emailOrUsername.includes('@') ? (await User.getByEmail(emailOrUsername)) : (await User.getByUsername(emailOrUsername))
     if (!user) {
       res.statusCode = 302
       return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING.code}`)

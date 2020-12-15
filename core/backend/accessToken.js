@@ -1,10 +1,11 @@
 import ErrorCodes from '../fullstack/ErrorCodes'
 import JWT from './JWT'
+import User from '../backend/DB/models/User'
 
 /**
  * Middleware get access token data
  */
-export default function accessToken(req, res, next) {
+export default async function accessToken(req, res, next) {
   req.accessTokenData = null
   const bearer = req.headers.authorization
 
@@ -33,6 +34,16 @@ export default function accessToken(req, res, next) {
     email: tokenInfo.data.email,
     username: tokenInfo.data.username,
   }
+
+  const user = await User.getByUsername(tokenInfo.data.username)
+
+  if (!user) {
+    res.statusCode = 401
+    res.json({ error: ErrorCodes.USER_NOT_EXISTING, data: null })
+    return next()
+  }
+
+  req.user = user
 
   next()
 }

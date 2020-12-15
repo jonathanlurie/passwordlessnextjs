@@ -2,9 +2,12 @@ import nc from 'next-connect'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
-import DB from '../../core/backend/DB'
+// import DB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import Email from '../../core/backend/Email'
+import User from '../../core/backend/DB/models/User'
+import Tools from '../../core/fullstack/Tools'
+import { Tooltip } from 'antd'
 
 
 /**
@@ -26,13 +29,23 @@ const handler = nc()
     const username = req.body.username
     const email = req.body.email
 
+    if (!Tools.isUsername(username)) {
+      res.statusCode = 417
+      return res.json({ error: ErrorCodes.INVALID_ENTRY.code })
+    }
+
+    if (!Tools.isEmail(email)) {
+      res.statusCode = 417
+      return res.json({ error: ErrorCodes.INVALID_ENTRY.code })
+    }
+
     // the email and username cannot be already taken
-    if (DB.hasUserFromEmail(email)) {
+    if (await User.getByEmail(email)) {
       res.statusCode = 403
       return res.json({ error: ErrorCodes.EMAIL_ALREADY_EXISTS.code })
     }
 
-    if (DB.hasUserFromUsername(username)) {
+    if (await User.getByUsername(username)) {
       res.statusCode = 403
       return res.json({ error: ErrorCodes.USERNAME_ALREADY_EXISTS.code })
     }
