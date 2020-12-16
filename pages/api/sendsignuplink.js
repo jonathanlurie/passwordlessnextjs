@@ -2,7 +2,6 @@ import nc from 'next-connect'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
-// import DB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import Email from '../../core/backend/Email'
 import User from '../../core/backend/DB/models/User'
@@ -40,12 +39,12 @@ const handler = nc()
     }
 
     // the email and username cannot be already taken
-    if (await User.getByEmail(email)) {
+    if (await User.findByEmail(email)) {
       res.statusCode = 403
       return res.json({ error: ErrorCodes.EMAIL_ALREADY_EXISTS.code })
     }
 
-    if (await User.getByUsername(username)) {
+    if (await User.findByUsername(username)) {
       res.statusCode = 403
       return res.json({ error: ErrorCodes.USERNAME_ALREADY_EXISTS.code })
     }

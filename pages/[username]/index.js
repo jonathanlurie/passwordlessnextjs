@@ -3,7 +3,7 @@ import { withRouter } from 'next/router'
 import Marked from 'marked'
 import DOMPurify from 'dompurify'
 import { JSDOM } from 'jsdom'
-import DB from '../../core/backend/DB'
+import User from '../../core/backend/DB/models/User'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import { Button, Input, Space, Col, Row, Divider } from 'antd'
 import { FrownOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
@@ -149,7 +149,7 @@ export async function getServerSideProps(context) {
   username = username.slice(1)
 
   // check if the username exists in the DB
-  const user = DB.getUserFromUsername(username)
+  const user = await User.findByUsername(username)
 
   // return props with error code if the user does not exist
   if (!user) {

@@ -6,7 +6,6 @@
 
 
 import cookie from 'cookie'
-// import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
@@ -43,7 +42,7 @@ const handler = nc()
     let username = tokenInfo.data.username
 
     // if the first function returns non null, the second is not called
-    let user = await User.getByEmail(email) || await User.getByUsername(username)
+    let user = await User.findByEmail(email) || await User.findByUsername(username)
 
     if (!user) {
       res.statusCode = 302

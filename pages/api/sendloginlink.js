@@ -1,5 +1,4 @@
 import nc from 'next-connect'
-// import DB from '../../core/backend/DB'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
@@ -18,18 +17,27 @@ const handler = nc()
   .use(apiLimiter)
   .post(async (req, res) => {
     const emailOrUsername = req.body.emailorusername
+    console.log('DEBUG01')
 
     // at least one of the two is required
     if (!emailOrUsername) {
       res.statusCode = 302
       return res.redirect(`/failedlogin?error=${ErrorCodes.CREDENTIALS_NOT_PROVIDED.code}`)
     }
+    console.log('DEBUG02')
     // if the first function returns non null, the second is not called
-    let user = emailOrUsername.includes('@') ? (await User.getByEmail(emailOrUsername)) : (await User.getByUsername(emailOrUsername))
+    let user = null
+    if (emailOrUsername.includes('@')) {
+      user = await User.findByEmail(emailOrUsername)
+    } else {
+      user = await User.findByUsername(emailOrUsername)
+    }
+    // let user = emailOrUsername.includes('@') ? (await User.findByEmail(emailOrUsername)) : (await User.findByUsername(emailOrUsername))
     if (!user) {
       res.statusCode = 302
       return res.redirect(`/failedlogin?error=${ErrorCodes.USER_NOT_EXISTING.code}`)
     }
+    console.log('DEBUG03')
     
     // we can now take the username and email from the BD
     const email = user.email
@@ -39,6 +47,7 @@ const handler = nc()
     const loginUrl = `${process.env.APP_URL}/api/login?token=${magicLinkToken}`
     console.log('loginUrl: ', loginUrl)
     
+    console.log('DEBUG04')
     try {
       await Email.sendLoginLink(email, loginUrl, username)
       console.log('The email was sent.')

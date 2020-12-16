@@ -1,4 +1,3 @@
-// import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
@@ -26,7 +25,7 @@ const handler = nc()
       return res.json({ found: false })
     }
 
-    const user = await User.getByUsername(req.query.username)
+    const user = await User.findByUsername(req.query.username)
 
     if (user) {
       res.statusCode = 200

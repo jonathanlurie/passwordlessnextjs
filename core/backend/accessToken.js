@@ -35,7 +35,7 @@ export default async function accessToken(req, res, next) {
     username: tokenInfo.data.username,
   }
 
-  const user = await User.getByUsername(tokenInfo.data.username)
+  const user = await User.findByUsername(tokenInfo.data.username)
 
   if (!user) {
     res.statusCode = 401

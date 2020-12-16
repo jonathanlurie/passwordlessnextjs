@@ -4,7 +4,6 @@
  * the magic link send as part of the login process.
  */
 
-import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import accessToken from '../../core/backend/accessToken'
@@ -23,7 +22,7 @@ const handler = nc()
     // It is available at req.user
 
     res.statusCode = 200
-    return res.json({data: res.user.strip(), error: null})
+    return res.json({data: req.user.strip(), error: null})
   })
 
 

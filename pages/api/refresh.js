@@ -8,7 +8,6 @@
 
 import cookie from 'cookie'
 import nc from 'next-connect'
-// import DB from '../../core/backend/DB'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
@@ -48,12 +47,12 @@ const handler = nc()
     const username = refreshTokenInfo.data.username
     const email = refreshTokenInfo.data.email
 
-    if (! (await User.getByEmail(email))) {
+    if (! (await User.findByEmail(email))) {
       res.statusCode = 404
       res.json({ error: ErrorCodes.EMAIL_NOT_EXISTING.code, data: null})
     }
 
-    if (! (await User.getByUsername(username))) {
+    if (! (await User.findByUsername(username))) {
       res.statusCode = 404
       res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING.code, data: null})
     }
