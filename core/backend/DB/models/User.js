@@ -60,12 +60,7 @@ function init() {
     website: {
       type: String,
       required: false,
-      validate: value => {
-        return validator.isURL(value,  { 
-          require_protocol: true,
-          require_valid_protocol: true
-        })
-      }
+      trim: true,
     },
 
     picture: {
@@ -73,7 +68,7 @@ function init() {
       required: false
     },
 
-    description: {
+    text: {
       type: String,
       required: false
     },

@@ -27,3 +27,10 @@
   font-size: 1.5em;
   color: #5e5e5e;
 }
+
+.no-text {
+  text-align: center;
+  font-size: 1.5em;
+  color: #40a9fe61;
+  padding-top: 50px;
+}

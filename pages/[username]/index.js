@@ -6,8 +6,7 @@ import { JSDOM } from 'jsdom'
 import User from '../../core/backend/DB/models/User'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import { Button, Input, Space, Col, Row, Divider } from 'antd'
-import { FrownOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
-import SDK from '../../core/frontend/SDK'
+import { FrownOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } from '@ant-design/icons'
 import TokenizedPage from '../../components/TokenizedPage'
 import AppLayout from '../../components/AppLayout'
 import ProfilePicture from '../../components/ProfilePicture'
@@ -100,21 +99,29 @@ class UserPage extends React.Component {
               }
             </Space>
           </Divider>
-          <div
+          {
+            data.text
+            ?
+            <div
               className={Styles['long-text']}
               ref={this._htmlDivRef} dangerouslySetInnerHTML={{ __html: data.text }}
             />
+            :
+            <div
+              className={Styles['no-text']}
+            >
+              {data.displayName ? data.displayName : data.username} did not write anything yet.
+            </div>
+          }
+          
         </div>
       )
     }
 
-
     return (
       <TokenizedPage>
         <AppLayout>
-          
             {content}
-
         </AppLayout>
       </TokenizedPage>
     )
@@ -144,7 +151,6 @@ export async function getServerSideProps(context) {
     return
   }
 
-
   // remove the @ from username
   username = username.slice(1)
 
@@ -161,20 +167,23 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const userExtra = DB.getUserExtraDataById(user.userId)
+  // strip user from some props we dont want to propate to frontend:
+  const userObj = user.toObject({flattenMaps: true, versionKey: false})
+  delete userObj._id
+  delete userObj.email // since this would make it visible to bots
+  delete userObj.isAdmin
 
   // convert markdown to html on server side
   // in order to benefit from SEO if necessary.
   // If SEO doe not matter, it's probably better to do it all
   // on client and not use getServerSideProps at all.
-  userExtra.text = mdToHtml(userExtra.text)
+  userObj.text = mdToHtml(userObj.text)
 
   return {
     props: {
       error: null,
       data: {
-        ...userExtra,
-        username: user.username,
+        ...userObj,
       },
     },
   }
@@ -182,6 +191,10 @@ export async function getServerSideProps(context) {
 
 
 function mdToHtml(md) {
+  if (!md) {
+    return ''
+  }
+
   const { window } = new JSDOM('<!DOCTYPE html>')
   const domPurify = DOMPurify(window)
   return domPurify.sanitize(Marked(md), { ADD_TAGS: ["iframe"] })

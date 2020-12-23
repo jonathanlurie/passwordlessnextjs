@@ -72,14 +72,7 @@ export default class HomePage extends React.Component {
   }
 
 
-  onTextChange = (e) => {
-    this.setState({
-      text: e.target.value,
-    })
-  }
-
-  onTextChange2 = (codeMirrorInstance, changes) => {    
-    // this._editText = codeMirrorInstance.getValue()
+  onTextChange = (codeMirrorInstance, changes) => {    
     this.setState({
       text: codeMirrorInstance.getValue(),
     })
@@ -215,7 +208,7 @@ export default class HomePage extends React.Component {
               <CodeMirror
                 height="65vh"
                 value={this.state.text}
-                onChange={this.onTextChange2}
+                onChange={this.onTextChange}
                 options={{
                   tabSize: 2,
                   mode: 'markdown',
@@ -225,8 +218,6 @@ export default class HomePage extends React.Component {
                 }}
               />
             </div>
-
-            {/* <TextArea className={Styles['text-area']} rows={10} placeholder='What about you?' value={this.state.text} onChange={this.onTextChange}/> */}
 
             <Space>
               <Button type='primary' onClick={this.save} >Save</Button>
