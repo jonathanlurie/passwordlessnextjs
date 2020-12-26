@@ -139,7 +139,7 @@ export async function getServerSideProps(context) {
     context.res.setHeader("location", `/@${username}`)
     context.res.statusCode = 302
     context.res.end()
-    return
+    return {}
   }
 
   // the username is missing and there is only @ in the URL,
@@ -148,7 +148,7 @@ export async function getServerSideProps(context) {
     context.res.setHeader("location", '/')
     context.res.statusCode = 302
     context.res.end()
-    return
+    return {}
   }
 
   // remove the @ from username

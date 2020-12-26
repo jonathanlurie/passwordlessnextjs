@@ -89,11 +89,9 @@ function init() {
     delete keyValueStripped.username // a user cannot change its username
     delete keyValueStripped.email // this will be a on a dedicated endpoint/function that sends a validation email
     delete keyValueStripped.isAdmin // this will be on a dedicated endpoint/function
-
     const user = this
 
     Object.keys(keyValueStripped).forEach((key) => {
-      console.log('KEY: ', key, 'VALUE:', keyValueStripped[key]);
       user[key] = keyValueStripped[key]
     })
     

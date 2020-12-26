@@ -56,7 +56,7 @@ export default class SDK {
   }
 
 
-  static async getUserExtra() {
+  static async getUserData() {
     const accessToken = AccessToken.get()
     const headers = {}
 
@@ -64,7 +64,7 @@ export default class SDK {
       headers['Authorization'] = `Bearer ${accessToken}`
     }
 
-    const res = await fetch('/api/userextra', {
+    const res = await fetch('/api/userdata', {
       method: 'GET',
       headers,
     })
@@ -74,7 +74,7 @@ export default class SDK {
   }
 
 
-  static async postUserExtra(userExtra) {
+  static async postUserData(userData) {
     const accessToken = AccessToken.get()
     const headers = {
       'Content-Type': 'application/json',
@@ -84,10 +84,10 @@ export default class SDK {
       headers['Authorization'] = `Bearer ${accessToken}`
     }
 
-    const res = await fetch('/api/userextra', {
+    const res = await fetch('/api/userdata', {
       method: 'POST',
       headers,
-      body: JSON.stringify(userExtra)
+      body: JSON.stringify(userData)
     })
 
     const json = await res.json()

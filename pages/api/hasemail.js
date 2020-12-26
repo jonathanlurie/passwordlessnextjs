@@ -18,10 +18,10 @@ const handler = nc()
     if (!('email' in req.query)) {
       res.statusCode = 404
       return res.json({ found: false })
-    }
+    }    
 
     // taking a shortcut here
-    if (!Tools.isEmail(email)) {
+    if (!Tools.isEmail(req.query.email)) {
       res.statusCode = 404
       return res.json({ found: false })
     }

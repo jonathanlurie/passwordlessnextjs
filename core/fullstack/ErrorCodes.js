@@ -72,7 +72,11 @@ const ERRORS = {
   WRONG_DATA_FORMAT: {
     code: 17,
     message: 'The data is in an unexpected format.'
-  }
+  },
+  DATABASE_UPDATE_ERROR: {
+    code: 18,
+    message: 'The data could not be udated for due to a database issue.'
+  },
 }
 
 

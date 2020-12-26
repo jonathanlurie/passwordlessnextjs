@@ -42,11 +42,11 @@ const handler = nc()
     }
 
     try {
-      req.user.updateSafe(req.body)
+      await req.user.updateSafe(req.body)
     } catch (e) {
       res.statusCode = 500
       console.log(e)
-      return res.json({data: 'Data updated', error: e.message})
+      return res.json({data: null, error: ErrorCodes.DATABASE_UPDATE_ERROR.code})
     }
 
     res.statusCode = 200

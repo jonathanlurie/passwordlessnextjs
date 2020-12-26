@@ -10,7 +10,7 @@ const CodeMirror = dynamic(() => import('../../components/ReactCodeMirror'), {
 })
 
 import SDK from '../../core/frontend/SDK'
-import LogoutButton from '../../components/LogoutButton'
+import { getMessageFromCode } from '../../core/fullstack/ErrorCodes'
 import TokenizedPage from '../../components/TokenizedPage'
 import AppLayout from '../../components/AppLayout'
 import ProfilePicture from '../../components/ProfilePicture'
@@ -47,7 +47,7 @@ export default class HomePage extends React.Component {
     let userExtraInfo = null
     
     try {
-      userExtraInfo = await SDK.getUserExtra()
+      userExtraInfo = await SDK.getUserData()
     } catch(e) {
       // TODO: deal with this error
       console.log('error 1', e)
@@ -152,12 +152,18 @@ export default class HomePage extends React.Component {
 
   save = async () => {
     this._userExtra = {...this.state}
-    const response = await SDK.postUserExtra(this._userExtra)
-    if (response.error) {
+    try {
+      const response = await SDK.postUserData(this._userExtra)
+      if (response.error) {
+        message.error(getMessageFromCode(response.error))
+      } else {
+        message.success('Saved!')
+      }
+    } catch (e) {
       message.error('Failed to save!')
-    } else {
-      message.success('Saved!')
     }
+    
+    
   }
 
   cancel = () => {
@@ -172,34 +178,21 @@ export default class HomePage extends React.Component {
     return (
       <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
         <AppLayout>
-        <Space direction='vertical' className={Styles['spacer']}>
-            {/* <LogoutButton/> */}
-            {/* <pre>
-              {JSON.stringify(this._userExtra, null, 2)}
-            </pre> */}
-            
-            
+        <Space direction='vertical' className={Styles['spacer']}>            
             <Space>
             <ProfilePicture img={this.state.picture} />
               <Button type="primary" shape="circle" icon={<CloudUploadOutlined />} onClick={this.addPicture}/>
-
               {
                 this.state.picture ?
                 <Button type="danger" shape="circle" icon={<DeleteOutlined />} onClick={this.deletePicture}/> :
                 null
               }
-            
-            {/* <input type='file' onChange={this.onFileSelected}/> */}
             </Space>
 
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Display name' value={this.state.displayName} onChange={this.onDisplayNameChange} prefix={<UserOutlined />} />
-
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Website URL' value={this.state.website} onChange={this.onWebsiteChange} prefix={<GlobalOutlined />} />
-
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Twitter username' value={this.state.twitterUsername} onChange={this.onTwitterUsernameChange} prefix={<TwitterOutlined />} />
-
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Instagram username' value={this.state.instagramUsername} onChange={this.onInstagramUsernameChange} prefix={<InstagramOutlined />} />
-
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Github username' value={this.state.githubUsername} onChange={this.onGithubUsernameChange} prefix={<GithubOutlined />} />
 
             <div
