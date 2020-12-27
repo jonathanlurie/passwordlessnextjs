@@ -35,13 +35,16 @@
 
 
 .intro-phrase {
-  border: 1px #00e21e6e solid;
+  border: 2px #4ec35d6e solid;
   border-radius: 3px;
   background: #00e21e17;
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
   text-align: center;
   padding: 1px 6px;
   color: #00821194;
+  font-size: 1.2em;
 }
 
 
@@ -55,8 +58,16 @@
   color: #1010106e;
   font-family: monospace;
   margin-bottom: 30px;
+  font-size: 1.1em;
   -webkit-user-select: all;  /* Chrome 49+ */
   -moz-user-select: all;     /* Firefox 43+ */
   -ms-user-select: all;      /* No support yet */
   user-select: all;          /* Likely future */   
+}
+
+.code-info {
+  text-align: center;
+  margin: 10px 0 10px 0;
+  color: #40a9fe;
+  font-size: 1.1em;
 }

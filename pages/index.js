@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Styles from './styles.module.css'
 import TokenizedPage from '../components/TokenizedPage'
 import AppLayout from '../components/AppLayout'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Tooltip } from 'antd'
 
 export default function Home() {
   return (
@@ -30,27 +30,33 @@ export default function Home() {
 
           <Row justify='center' gutter={[50, 50]}>
             <Col>
-              <div
-                className={Styles['vendor-bubble']}
-              >
-                <img alt='nextjs logo' src='images/nextjs_logo.svg'/>
-              </div>
+              <Tooltip title='The fullstack React framework' placement='bottom'>
+                <div
+                  className={Styles['vendor-bubble']}
+                >
+                  <img alt='nextjs logo' src='images/nextjs_logo.svg'/>
+                </div>
+              </Tooltip>
             </Col>
 
             <Col>
-              <div
-                className={Styles['vendor-bubble']}
-              >
-                <img alt='nextjs logo' src='images/mongodb_logo.svg'/>
-              </div>
+              <Tooltip title='The document/NoSQL database' placement='bottom'>
+                <div
+                  className={Styles['vendor-bubble']}
+                >
+                  <img alt='nextjs logo' src='images/mongodb_logo.svg'/>
+                </div>
+              </Tooltip>
             </Col>
 
             <Col >
-              <div
-                className={Styles['vendor-bubble']}
-              >
-                <img alt='nextjs logo' src='images/sendgrid_logo.svg'/>
-              </div>
+              <Tooltip title='The email service' placement='bottom'>
+                <div
+                  className={Styles['vendor-bubble']}
+                >
+                  <img alt='nextjs logo' src='images/sendgrid_logo.svg'/>
+                </div>
+              </Tooltip>
             </Col>
 
           </Row>
@@ -58,9 +64,14 @@ export default function Home() {
           <Row justify='center'>
             <Col>
               <div
+                className={Styles['code-info']}
+              >
+                Build your own:
+              </div>
+              <div
                 className={Styles['code']}
               >
-                git clone https://github.com/jonathanlurie/passwordlessnextjs.git
+                npx degit jonathanlurie/passwordlessnextjs#main my-project
               </div>
             </Col>
           </Row>
