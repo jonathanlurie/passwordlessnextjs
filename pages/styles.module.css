@@ -1,0 +1,62 @@
+.content {
+  margin-top: 30px;
+}
+
+.vendor-bubble {
+  min-width: 150px;
+  min-height: 150px;
+  width: 10vw;
+  height: 10vw;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 0 28px -5px rgb(0 0 0/13%);
+}
+
+.vendor-bubble img {
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 90%;
+  left: 0;
+  right: 0;
+}
+
+.catch-phrase {
+  font-size: 9vmin;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.1em;
+  margin: 50px;
+  color: black;
+}
+
+
+.intro-phrase {
+  border: 1px #00e21e6e solid;
+  border-radius: 3px;
+  background: #00e21e17;
+  width: max-content;
+  text-align: center;
+  padding: 1px 6px;
+  color: #00821194;
+}
+
+
+.code {
+  border: 1px #d0d0d06e solid;
+  border-radius: 3px;
+  background: #c1c1c117;
+  width: max-content;
+  text-align: center;
+  padding: 1px 9px;
+  color: #1010106e;
+  font-family: monospace;
+  margin-bottom: 30px;
+  -webkit-user-select: all;  /* Chrome 49+ */
+  -moz-user-select: all;     /* Firefox 43+ */
+  -ms-user-select: all;      /* No support yet */
+  user-select: all;          /* Likely future */   
+}
