@@ -15,7 +15,7 @@ import {
 } from '@ant-design/icons'
 import SDK from '../../core/frontend/SDK'
 import AccessToken from '../../core/frontend/AccessToken'
-import Styles from './LoggedInMenu.module.css'
+import Styles from './LoggedInMenuStyles.module.css'
 
 
 export default class LoggedInMenu extends React.Component {
