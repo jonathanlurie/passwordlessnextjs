@@ -17,8 +17,6 @@
     "dotenv": "^8.2.0",
     "jsdom": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
-    "lmdb-store": "^0.7.1",
-    "mailgun-js": "^0.22.0",
     "marked": "^1.2.5",
     "mongoose": "^5.11.8",
     "next": "^10.0.3",

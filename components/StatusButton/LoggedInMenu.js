@@ -27,7 +27,6 @@ export default class LoggedInMenu extends React.Component {
   }
 
 
-
   render() {
     if (!this.state.tokenData) {
       return (
