@@ -3,9 +3,7 @@ import User from './models/User'
 // import ErrorCodes from '../../core/fullstack/ErrorCodes'
 // import ErrorWithCode from '../fullstack/ErrorWithCode'
 
-
-export async function init() {
-  
+export default async function init(req, res, next = null) {
   // if not already connected, then we connect.
   // This allows us to import this file everytime we need to intect with DB
   if (!mongoose.connection.readyState) {
@@ -34,4 +32,7 @@ export async function init() {
     }
   }
 
+  if (next) {
+    next()
+  }
 }

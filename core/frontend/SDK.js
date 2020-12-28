@@ -48,7 +48,11 @@ export default class SDK {
       const renewEveryMs = Math.round(lifespan * 0.5) * 1000
       clearInterval(refreshIntervalId)
       refreshIntervalId = setInterval(() => {
-        SDK.refreshToken()
+        try {
+          SDK.refreshToken()
+        } catch(err) {
+          console.log('Refresh token failed')
+        }
       }, renewEveryMs)
     }
 
@@ -99,7 +103,7 @@ export default class SDK {
     AccessToken.set(null)
     const res = await fetch('/api/logout')
     // using this instead of Router.push forces a reload of the page
-    window.location.href = redirectUrl
+    // window.location.href = redirectUrl
   }
 
 }

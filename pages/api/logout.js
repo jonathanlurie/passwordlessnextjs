@@ -15,6 +15,7 @@ const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
   .get((req, res) => {
+    console.log('LOGOUT! deleting cookie')
 
     // A cookie cannot be explicitely deleted, so to remove the 
     res.setHeader(
@@ -26,10 +27,10 @@ const handler = nc()
       }
     ))
 
-    // res.statusCode = 200
-    // res.json({ error: null })
-    res.statusCode = 302
-    return res.redirect(`/`)
+    res.statusCode = 200
+    res.json({ error: null })
+    // res.statusCode = 302
+    // return res.redirect(`/`)
   })
 
 export default handler

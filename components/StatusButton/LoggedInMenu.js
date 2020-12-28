@@ -61,7 +61,7 @@ export default class LoggedInMenu extends React.Component {
         <Menu.Item
           key="3"
           danger
-          onClick={e => SDK.logout()}
+          onClick={async e => await SDK.logout()}
         >
           <PoweroffOutlined/> Logout
         </Menu.Item>

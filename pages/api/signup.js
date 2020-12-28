@@ -9,6 +9,7 @@ import cookie from 'cookie'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import nc from 'next-connect'
+import initDB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import JWT from '../../core/backend/JWT'
 import User from '../../core/backend/DB/models/User'
@@ -17,6 +18,7 @@ import User from '../../core/backend/DB/models/User'
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
+  .use(initDB)
   .get(async (req, res) => {
 
     // the query parm 'token' must be present

@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
+import initDB from '../../core/backend/DB'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 import Email from '../../core/backend/Email'
 import User from '../../core/backend/DB/models/User'
@@ -18,6 +19,7 @@ import { Tooltip } from 'antd'
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
+  .use(initDB)
   .post(async (req, res) => {
     
     if (!('username' in req.body) || !('email' in req.body)) {

@@ -1,6 +1,7 @@
 import nc from 'next-connect'
 import JWT from '../../core/backend/JWT'
 import apiLimiter from '../../core/backend/apiLimiter'
+import initDB from '../../core/backend/DB'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import Email from '../../core/backend/Email'
 import User from '../../core/backend/DB/models/User'
@@ -15,6 +16,7 @@ import User from '../../core/backend/DB/models/User'
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
+  .use(initDB)
   .post(async (req, res) => {
     const emailOrUsername = req.body.emailorusername
 

@@ -108,26 +108,36 @@ function init() {
 
 
   userSchema.statics.findByEmail = async function(email) {
-    // Search for a user by email.
-    const user = await User.findOne({ email })
-    if (!user) {
-      console.log(`No user found with the email ${email}`)
-        return null
+    try {
+      // Search for a user by email.
+      const user = await User.findOne({ email })
+      if (!user) {
+        console.log(`No user found with the email ${email}`)
+          return null
+      }
+      return user
+    } catch (err) {
+      console.log(err)
+      return null
     }
-    return user
   }
 
 
   userSchema.statics.findByUsername = async function(username) {
     // Search for a user by username.
-    const user = await User.findOne({ username })
-    if (!user) {
-      console.log(`No user found with the username ${username}`)
-        return null
+    try {
+      const user = await User.findOne({ username })
+      if (!user) {
+        console.log(`No user found with the username ${username}`)
+          return null
+      }
+      return user
+    } catch(err) {
+      console.log(err)
+      return null
     }
-    
-    return user
   }
+
 
   const User = mongoose.model('User', userSchema)
 }

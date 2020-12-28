@@ -7,6 +7,7 @@
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
 import accessToken from '../../core/backend/accessToken'
+import initDB from '../../core/backend/DB'
 import nc from 'next-connect'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
 
@@ -16,6 +17,7 @@ const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
   .use(accessToken)
+  .use(initDB)
   .get(async (req, res) => {
     // The user data has been already fetched using the access token
     // by the 'accessToken' middleware.

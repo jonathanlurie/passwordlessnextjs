@@ -1,5 +1,6 @@
 import apiLimiter from '../../core/backend/apiLimiter'
 import uniqueVisitorId from '../../core/backend/uniqueVisitorId'
+import initDB from '../../core/backend/DB'
 import nc from 'next-connect'
 import User from '../../core/backend/DB/models/User'
 import Tools from '../../core/fullstack/Tools'
@@ -12,6 +13,7 @@ import Tools from '../../core/fullstack/Tools'
 const handler = nc()
   .use(uniqueVisitorId)
   .use(apiLimiter)
+  .use(initDB)
   .get( async (req, res) => {
 
     if (!('emailorusername' in req.query)) {
