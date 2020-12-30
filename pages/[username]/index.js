@@ -5,13 +5,14 @@ import DOMPurify from 'dompurify'
 import { JSDOM } from 'jsdom'
 import User from '../../core/backend/DB/models/User'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
-import { Button, Input, Space, Col, Row, Divider } from 'antd'
+import { Button, Space, Col, Row, Divider } from 'antd'
 import { FrownOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } from '@ant-design/icons'
 import TokenizedPage from '../../components/TokenizedPage'
 import AppLayout from '../../components/AppLayout'
 import ProfilePicture from '../../components/ProfilePicture'
+import initDB from '../../core/backend/DB'
 import Styles from './styles.module.css'
-const { TextArea } = Input
+// const { TextArea } = Input
 
 
 class UserPage extends React.Component {
@@ -133,9 +134,12 @@ export async function getServerSideProps(context) {
   const urlQuery = context.query
   let username = urlQuery.username
 
+  console.log('username:', username)
+
   // if the username does not start with @, then redurect to same page
   // but with @ prepended
   if (!username.startsWith('@')) {
+    console.log('username doesnt start with @. Prepend a @ and redirect...')
     context.res.setHeader("location", `/@${username}`)
     context.res.statusCode = 302
     context.res.end()
@@ -145,16 +149,19 @@ export async function getServerSideProps(context) {
   // the username is missing and there is only @ in the URL,
   // redirecting to /
   if (username === '@') {
+    console.log('Username is only @, this is invalid. Redirect to /')
     context.res.setHeader("location", '/')
     context.res.statusCode = 302
     context.res.end()
     return {}
   }
 
+  console.log('Username format OK. Looking into DB...')
   // remove the @ from username
   username = username.slice(1)
 
   // check if the username exists in the DB
+  await initDB()
   const user = await User.findByUsername(username)
 
   // return props with error code if the user does not exist
@@ -167,6 +174,8 @@ export async function getServerSideProps(context) {
     }
   }
 
+  console.log('User found in DB. Stripping private data...')
+
   // strip user from some props we dont want to propate to frontend:
   const userObj = user.toObject({flattenMaps: true, versionKey: false})
   delete userObj._id
@@ -177,7 +186,9 @@ export async function getServerSideProps(context) {
   // in order to benefit from SEO if necessary.
   // If SEO doe not matter, it's probably better to do it all
   // on client and not use getServerSideProps at all.
+  console.log('Converting markdown article to HTML...')
   userObj.text = mdToHtml(userObj.text)
+  console.log('Done.')
 
   return {
     props: {
