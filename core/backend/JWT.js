@@ -35,11 +35,12 @@ export default class JWT {
   /**
    * Generates a JWT that is only made for signup.
    * This kind of token is valid for only 10 minutes.
+   * @param {string} email 
    * @param {string} username 
    * @return {string} a JWT with 'signup' as a subject
    */
-  static signupMagicLink(username) {
-    return JWT.sign({subject: 'signup', username}, process.env.SIGNUP_TOKEN_LIFETIME)
+  static signupMagicLink(email, username) {
+    return JWT.sign({subject: 'signup', email, username}, process.env.SIGNUP_TOKEN_LIFETIME)
   }
 
 
