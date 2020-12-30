@@ -103,7 +103,7 @@ export default class SDK {
     AccessToken.set(null)
     const res = await fetch('/api/logout')
     // using this instead of Router.push forces a reload of the page
-    // window.location.href = redirectUrl
+    window.location.href = redirectUrl
   }
 
 }
