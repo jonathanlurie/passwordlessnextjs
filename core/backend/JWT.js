@@ -65,7 +65,7 @@ export default class JWT {
   }
 
 
-  static accessToken(email, username) {
-    return JWT.sign({subject: 'access', email, username}, process.env.ACCESS_TOKEN_LIFETIME)
+  static accessToken(username) {
+    return JWT.sign({subject: 'access', username}, process.env.ACCESS_TOKEN_LIFETIME)
   }
 }

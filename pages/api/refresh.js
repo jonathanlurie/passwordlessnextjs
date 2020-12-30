@@ -68,7 +68,7 @@ const handler = nc()
     ))
 
     // Then let's get an access token and send it back
-    const accessToken = JWT.accessToken(user.email, user.username)
+    const accessToken = JWT.accessToken(user.username)
     res.statusCode = 200
     res.json({ error: null, data: accessToken})
   })
