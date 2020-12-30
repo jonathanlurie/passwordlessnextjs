@@ -21,8 +21,8 @@ const handler = nc()
     // A cookie cannot be explicitely deleted, so to remove the 
     res.setHeader(
       'Set-Cookie',
-      cookie.serialize('refresh_token', String(''), {
-        maxAge: -1, // one second ago
+      cookie.serialize('refresh_token', '', {
+        maxAge: 0, // zero second ago
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       }
@@ -30,8 +30,6 @@ const handler = nc()
 
     res.statusCode = 200
     res.json({ error: null })
-    // res.statusCode = 302
-    // return res.redirect(`/`)
   })
 
 export default handler

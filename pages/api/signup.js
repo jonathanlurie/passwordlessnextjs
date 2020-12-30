@@ -57,7 +57,7 @@ const handler = nc()
     // if everything is fine, a refresh token is put in the cookies.
     // as for the uniqueVisitorId, this cookie is not visible from
     // the frontend.
-    const refreshToken = JWT.refreshToken(email, username)
+    const refreshToken = JWT.refreshToken(username)
     res.setHeader(
       'Set-Cookie',
       cookie.serialize('refresh_token', String(refreshToken), {

@@ -21,7 +21,7 @@ const handler = nc()
   .use(initDB)
   .get(async (req, res) => {
     console.log('Is app in production mode? ', process.env.NODE_ENV === 'production')
-    
+
     // the query parm 'token' must be present
     if (!('token' in req.query)) {
       res.statusCode = 302
@@ -41,11 +41,10 @@ const handler = nc()
       return res.redirect(`/failedlogin?error=${ErrorCodes.LOGIN_INVALID_TOKEN.code}`)
     }
 
-    let email = tokenInfo.data.email
     let username = tokenInfo.data.username
 
     // if the first function returns non null, the second is not called
-    let user = await User.findByEmail(email) || await User.findByUsername(username)
+    let user = await User.findByUsername(username)
 
     if (!user) {
       res.statusCode = 302
@@ -53,13 +52,13 @@ const handler = nc()
     }
     
     // we can now take the username and email from the BD
-    email = user.email
+    const email = user.email
     username = user.username
 
     // if everything is fine, a refresh token is put in the cookies.
     // as for the uniqueVisitorId, this cookie is not visible from
     // the frontend but will enable the user fetching the /api/refresh endpoint
-    const refreshToken = JWT.refreshToken(email, username)
+    const refreshToken = JWT.refreshToken(username)
     res.setHeader(
       'Set-Cookie',
       cookie.serialize('refresh_token', String(refreshToken), {

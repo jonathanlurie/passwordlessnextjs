@@ -43,7 +43,7 @@ const handler = nc()
     const email = user.email
     const username = user.username
     
-    const magicLinkToken = JWT.loginMagicLink(email, username)
+    const magicLinkToken = JWT.loginMagicLink(username)
     const loginUrl = `${process.env.APP_URL}/api/login?token=${magicLinkToken}`
     console.log('loginUrl: ', loginUrl)
     

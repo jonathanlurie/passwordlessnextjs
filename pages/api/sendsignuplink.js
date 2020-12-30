@@ -51,7 +51,7 @@ const handler = nc()
       return res.json({ error: ErrorCodes.USERNAME_ALREADY_EXISTS.code })
     }
 
-    const magicLinkToken = JWT.signupMagicLink(req.body.email, req.body.username)
+    const magicLinkToken = JWT.signupMagicLink(req.body.username)
     const signupUrl = `${process.env.APP_URL}/api/signup?token=${magicLinkToken}`
     console.log('signupUrl: ', signupUrl)
     

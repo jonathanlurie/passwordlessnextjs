@@ -22,7 +22,7 @@ const handler = nc()
   .use(initDB)
   .get( async (req, res) => {
     console.log('Is app in production mode? ', process.env.NODE_ENV === 'production')
-    
+
     // looking for the refresh token from the cookies
     let refresh_token = null
     if (req.headers.cookie) {
@@ -45,24 +45,19 @@ const handler = nc()
       return res.json({ error: ErrorCodes.REFRESH_INVALID_TOKEN.code, data: null})
     }
 
-    // From this point, we know we have a valid token. Though, the username and
-    // email may be no longer in the DB.
+    // From this point, we know we have a valid token. Though, the username may no
+    // longer be in the DB.
     const username = refreshTokenInfo.data.username
-    const email = refreshTokenInfo.data.email
+    const user = await User.findByUsername(username)
 
-    if (! (await User.findByEmail(email))) {
-      res.statusCode = 404
-      res.json({ error: ErrorCodes.EMAIL_NOT_EXISTING.code, data: null})
-    }
-
-    if (! (await User.findByUsername(username))) {
+    if (!user) {
       res.statusCode = 404
       res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING.code, data: null})
     }
 
     // from here, things are good.
     // Let's first update the refresh token
-    const refreshToken = JWT.refreshToken(email, username)
+    const refreshToken = JWT.refreshToken(username)
     res.setHeader(
       'Set-Cookie',
       cookie.serialize('refresh_token', String(refreshToken), {
@@ -73,7 +68,7 @@ const handler = nc()
     ))
 
     // Then let's get an access token and send it back
-    const accessToken = JWT.accessToken(email, username)
+    const accessToken = JWT.accessToken(user.email, user.username)
     res.statusCode = 200
     res.json({ error: null, data: accessToken})
   })
