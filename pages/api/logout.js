@@ -16,6 +16,7 @@ const handler = nc()
   .use(apiLimiter)
   .get((req, res) => {
     console.log('LOGOUT! deleting cookie')
+    console.log('Is app in production mode? ', process.env.NODE_ENV === 'production')
 
     // A cookie cannot be explicitely deleted, so to remove the 
     res.setHeader(

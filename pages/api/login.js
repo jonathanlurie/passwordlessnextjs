@@ -20,7 +20,8 @@ const handler = nc()
   .use(apiLimiter)
   .use(initDB)
   .get(async (req, res) => {
-
+    console.log('Is app in production mode? ', process.env.NODE_ENV === 'production')
+    
     // the query parm 'token' must be present
     if (!('token' in req.query)) {
       res.statusCode = 302

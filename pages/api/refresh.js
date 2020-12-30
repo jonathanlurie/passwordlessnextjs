@@ -21,7 +21,8 @@ const handler = nc()
   .use(apiLimiter)
   .use(initDB)
   .get( async (req, res) => {
-
+    console.log('Is app in production mode? ', process.env.NODE_ENV === 'production')
+    
     // looking for the refresh token from the cookies
     let refresh_token = null
     if (req.headers.cookie) {
