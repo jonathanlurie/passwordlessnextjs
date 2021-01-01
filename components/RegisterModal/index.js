@@ -85,7 +85,11 @@ export default class RegisterModal extends React.Component {
   }
 
 
-  onSubmit = async () => {    
+  onSubmit = async () => {
+    if (!this.state.validEmail || !this.state.validUsername) {
+      return
+    }
+    
     const res = await fetch('/api/sendsignuplink', 
       {
         method: 'POST',
@@ -127,9 +131,6 @@ export default class RegisterModal extends React.Component {
 
   render() {
     return (
-      
-
-
       <Modal
         title={
           <div
@@ -144,7 +145,7 @@ export default class RegisterModal extends React.Component {
         visible={true}
         closable={false}
         // centered
-        maskClosable={true}
+        maskClosable={false}
         onCancel={this.props.onCancel}
         keyboard={false}
         mask={true}
@@ -152,7 +153,7 @@ export default class RegisterModal extends React.Component {
           background: '#40a9fe'
         }}
         footer={
-          <div className={Styles['cancel-button']} onClick={this.props.onCancel}>cancel</div>
+          <div className={Styles['cancel-button']} onClick={this.props.onCancel}>{this.state.successMessage ? 'ok' : 'cancel'}</div>
         }
       >
         
@@ -168,12 +169,12 @@ export default class RegisterModal extends React.Component {
           :
           <Space direction='vertical' className={Styles['main']}>
           
-            <Tooltip color='volcano' placement='right' visible={!!this.state.messageUsername} title={this.state.messageUsername}>
+            <Tooltip color='volcano' placement='bottom' visible={!!this.state.messageUsername} title={this.state.messageUsername}>
               <Input placeholder='Username' onChange={this.onUsernameChange}/>
             </Tooltip>
             
-            <Tooltip color='volcano' placement='right' visible={!!this.state.messageEmail} title={this.state.messageEmail}>
-              <Input placeholder='E-mail' onChange={this.onEmailChange}/>
+            <Tooltip color='volcano' placement='bottom' visible={!!this.state.messageEmail} title={this.state.messageEmail}>
+              <Input placeholder='E-mail' onChange={this.onEmailChange} onPressEnter={this.onSubmit}/>
             </Tooltip>
 
             <Button disabled={!this.state.validEmail || !this.state.validUsername} type="primary" onClick={this.onSubmit} block>

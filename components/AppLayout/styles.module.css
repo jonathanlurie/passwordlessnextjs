@@ -16,14 +16,14 @@
 .title-passwordless {
   color: white;
   text-transform: uppercase;
-  font-size: 2em;
+  font-size: min(4vmin, 2em); /* 4vmin is so that the upper right menu is still visible on narrow screens */
   font-weight: 700;
 }
 
 .title-nextjs {
   color: white;
   text-transform: uppercase;
-  font-size: 2em;
+  font-size: min(4vmin, 2em); /* 4vmin is so that the upper right menu is still visible on narrow screens */
   font-weight: 100;
 }
 
@@ -41,6 +41,7 @@
   overflow: hidden;
   /* padding-left: 50px;
   padding-right: 50px; */
+  text-align: center;
 }
 
 .app-footer a {

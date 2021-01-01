@@ -28,6 +28,14 @@
   color: #5e5e5e;
 }
 
+.long-text code {
+  font-size: 0.75em;
+  background: #40a9fe21;
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: #2c597d;
+}
+
 .no-text {
   text-align: center;
   font-size: 1.5em;

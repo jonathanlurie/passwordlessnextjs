@@ -25,7 +25,7 @@
 }
 
 .catch-phrase {
-  font-size: 9vmin;
+  font-size: 8vmin;
   font-weight: 900;
   text-align: center;
   line-height: 1.1em;
@@ -45,11 +45,13 @@
   padding: 1px 6px;
   color: #00821194;
   font-size: 1.2em;
+  max-width: 100%;
 }
 
 
 .code {
   border: 1px #d0d0d06e solid;
+  max-width: 100%;
   border-radius: 3px;
   background: #c1c1c117;
   width: max-content;

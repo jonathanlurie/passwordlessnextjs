@@ -14,14 +14,14 @@
 .title-passwordless {
   color: #40a9fe;
   text-transform: uppercase;
-  font-size: 2em;
+  font-size: min(6vmin, 2em);
   font-weight: 700;
 }
 
 .title-nextjs {
   color: #40a9fe;
   text-transform: uppercase;
-  font-size: 2em;
+  font-size: min(6vmin, 2em);
   font-weight: 100;
 }
 

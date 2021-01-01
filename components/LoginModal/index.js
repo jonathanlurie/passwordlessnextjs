@@ -36,7 +36,11 @@ export default class LoginModal extends React.Component {
   }
 
 
-  onSubmit = async () => {    
+  onSubmit = async () => {
+    if(!this.state.validEmailOrUsername) {
+      return
+    }
+
     const res = await fetch('/api/sendloginlink', 
       {
         method: 'POST',
@@ -85,7 +89,7 @@ export default class LoginModal extends React.Component {
         visible={true}
         closable={false}
         // centered
-        maskClosable={true}
+        maskClosable={false}
         onCancel={this.props.onCancel}
         keyboard={false}
         mask={true}
@@ -93,7 +97,7 @@ export default class LoginModal extends React.Component {
           background: '#40a9fe'
         }}
         footer={
-          <div className={Styles['cancel-button']} onClick={this.props.onCancel}>cancel</div>
+        <div className={Styles['cancel-button']} onClick={this.props.onCancel}>{this.state.successMessage ? 'ok' : 'cancel'}</div>
         }
       >
 
@@ -108,8 +112,8 @@ export default class LoginModal extends React.Component {
           </div>
           :
           <Space direction='vertical' className={Styles['main']}>
-            <Tooltip color='volcano' placement='right' visible={!!this.state.messageEmailOrUsername} title={this.state.messageEmailOrUsername}>
-              <Input placeholder='Email or username' onChange={this.onEmailOrUsernameChange}/>
+            <Tooltip color='volcano' placement='bottom' visible={!!this.state.messageEmailOrUsername} title={this.state.messageEmailOrUsername}>
+              <Input placeholder='Email or username' onChange={this.onEmailOrUsernameChange}  onPressEnter={this.onSubmit}/>
             </Tooltip>
 
             <Button disabled={!this.state.validEmailOrUsername} type="primary" onClick={this.onSubmit} block>
