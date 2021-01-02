@@ -21,9 +21,9 @@ export default class AppLayout extends React.Component {
           className={Styles['app-header']}
         >
         <Row>
-        <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
+        <Col xs={1}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
-          <Col xs={20} sm={20} md={16} lg={16} xl={16}>
+          <Col xs={22} sm={20} md={16} lg={16} xl={16}>
               
               
             <Row justify="space-between">
@@ -40,18 +40,18 @@ export default class AppLayout extends React.Component {
               </Col>
             </Row>
           </Col>
-          <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
+          <Col xs={1}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
         </Row>
         </Header>
         <Content>
         <Row>
-        <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
+        <Col xs={1}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
-          <Col xs={20} sm={20} md={16} lg={16} xl={16}>
+          <Col xs={22} sm={20} md={16} lg={16} xl={16}>
               {this.props.children}
           </Col>
-          <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
+          <Col xs={1}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
         </Row>
 
@@ -60,12 +60,12 @@ export default class AppLayout extends React.Component {
           className={Styles['app-footer']}
         >
         <Row>
-        <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
+        <Col xs={1}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
-          <Col xs={20} sm={20} md={16} lg={16} xl={16}>
+          <Col xs={22} sm={20} md={16} lg={16} xl={16}>
               Made by <a href='https://twitter.com/jonathanlurie'>@jonathanlurie</a> - Project source available on <a href='https://github.com/jonathanlurie/passwordlessnextjs'>GitHub</a>.
           </Col>
-          <Col xs={2}  sm={2}  md={4}  lg={4} xl={4}>
+          <Col xs={1}  sm={2}  md={4}  lg={4} xl={4}>
           </Col>
         </Row>
         </Footer>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Input, Button, message, Space, Avatar } from 'antd'
+import { Input, Button, message, Space } from 'antd'
+import Head from 'next/head'
 import { UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
 
 // codeMirror uses references to 'navigator' so we use Dynamics to make sure
@@ -178,6 +179,28 @@ export default class HomePage extends React.Component {
     return (
       <TokenizedPage redirectOnFailedLogin onReady={this.onTokenizedPageReady}>
         <AppLayout>
+
+        <Head>
+          <title>Passwordless Next.js</title>
+          <link rel="shortcut icon" href="/favicon.ico" />
+
+          <meta name="description" content='The Next.js boilerplate for passwordless authentication.'/>
+          <meta name="author" content='Jonathan Lurie'/>
+
+          <meta property="og:title" content='Passwordless Next.js' key="title_OG" />
+          {/* <meta property="og:url" content={`${process.env.}`} key="url_OG"/> */}
+          <meta property="og:image" content='/images/social_cover.png' key="image_OG"/>
+          <meta property="og:description" content='The Next.js boilerplate for passwordless authentication.' key="description_OG"/>
+          <meta property="og:site_name" content="Passwordless Nextjs" key="sitename_OG"/>
+          <meta property="og:type" content="article" key="type_OG"/>
+
+          <meta name="twitter:title" content='Passwordless Next.js' key="title_TW"/>
+          <meta name="twitter:description" content='The Next.js boilerplate for passwordless authentication.' key="description_TW"/>
+          <meta name="twitter:image" content='/images/social_cover.png' key="image_TW"/>
+          <meta name="twitter:card" content="summary_large_image" key="card_TW"/>
+          <meta name="twitter:site" content="@jonathanlurie" key="site_TW"/>
+        </Head>
+
         <Space direction='vertical' className={Styles['spacer']}>            
             <Space>
             <ProfilePicture img={this.state.picture} />

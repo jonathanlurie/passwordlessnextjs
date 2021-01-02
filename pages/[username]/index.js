@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'next/router'
+import Head from 'next/head'
 import Marked from 'marked'
 import DOMPurify from 'dompurify'
 import { JSDOM } from 'jsdom'
@@ -122,6 +123,26 @@ class UserPage extends React.Component {
     return (
       <TokenizedPage>
         <AppLayout>
+          <Head>
+            <title>Passwordless Next.js</title>
+            <link rel="shortcut icon" href="/favicon.ico" />
+
+            <meta name="description" content={`${data.displayName ? data.displayName : data.username} profile on Paswordless Next.js`}/>
+            <meta name="author" content={data.displayName ? data.displayName : data.username}/>
+
+            <meta property="og:title" content='Passwordless Next.js' key="title_OG" />
+            {/* <meta property="og:url" content={`${process.env.}`} key="url_OG"/> */}
+            <meta property="og:image" content='/images/social_cover.png' key="image_OG"/>
+            <meta property="og:description" content={`${data.displayName ? data.displayName : data.username} profile on Paswordless Next.js`} key="description_OG"/>
+            <meta property="og:site_name" content="Passwordless Nextjs" key="sitename_OG"/>
+            <meta property="og:type" content="article" key="type_OG"/>
+
+            <meta name="twitter:title" content='Passwordless Next.js' key="title_TW"/>
+            <meta name="twitter:description" content={`${data.displayName ? data.displayName : data.username} profile on Paswordless Next.js`} key="description_TW"/>
+            <meta name="twitter:image" content='/images/social_cover.png' key="image_TW"/>
+            <meta name="twitter:card" content="summary_large_image" key="card_TW"/>
+            <meta name="twitter:site" content="@jonathanlurie" key="site_TW"/>
+          </Head>
             {content}
         </AppLayout>
       </TokenizedPage>
@@ -143,7 +164,7 @@ export async function getServerSideProps(context) {
     context.res.setHeader("location", `/@${username}`)
     context.res.statusCode = 302
     context.res.end()
-    return {}
+    return {props:{}}
   }
 
   // the username is missing and there is only @ in the URL,
@@ -153,7 +174,7 @@ export async function getServerSideProps(context) {
     context.res.setHeader("location", '/')
     context.res.statusCode = 302
     context.res.end()
-    return {}
+    return {props:{}}
   }
 
   console.log('Username format OK. Looking into DB...')
