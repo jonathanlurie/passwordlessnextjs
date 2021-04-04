@@ -1,7 +1,16 @@
 import React from 'react'
 import { Input, Button, message, Space } from 'antd'
 import Head from 'next/head'
-import { UserOutlined, GlobalOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined, DeleteOutlined, CloudUploadOutlined } from '@ant-design/icons'
+import { 
+  CommentOutlined,
+  UserOutlined,
+  GlobalOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
+  GithubOutlined,
+  DeleteOutlined,
+  CloudUploadOutlined
+} from '@ant-design/icons'
 
 // codeMirror uses references to 'navigator' so we use Dynamics to make sure
 // the dependency is pulled only on client side.
@@ -31,6 +40,7 @@ export default class HomePage extends React.Component {
       githubUsername: null,
       website: null,
       photo: null,
+      email: null,
     }
 
     this._userExtra = null
@@ -62,6 +72,8 @@ export default class HomePage extends React.Component {
     }
 
     this._userExtra = userExtraInfo.data
+
+    console.log('this._userExtra: ', this._userExtra)
 
     if (!this._userExtra) {
       this._userExtra = {}
@@ -108,9 +120,16 @@ export default class HomePage extends React.Component {
     })
   }
   
-  onGithubUsernameChange= (e) => {
+  onGithubUsernameChange = (e) => {
     this.setState({
       githubUsername: e.target.value,
+    })
+  }
+
+
+  onEmailChange = (e) => {
+    this.setState({
+      email: e.target.value,
     })
   }
 
@@ -151,21 +170,26 @@ export default class HomePage extends React.Component {
     input.click()
   }
 
+
   save = async () => {
+    let successMessage = 'Saved!'
+    if (this._userExtra.email && this._userExtra.email !== this.state.email) {
+      successMessage = 'Saved! Please confirm the email update from your former mailbox.'
+    }
+
     this._userExtra = {...this.state}
     try {
       const response = await SDK.postUserData(this._userExtra)
       if (response.error) {
         message.error(getMessageFromCode(response.error))
       } else {
-        message.success('Saved!')
+        message.success(successMessage)
       }
     } catch (e) {
       message.error('Failed to save!')
-    }
-    
-    
+    }  
   }
+
 
   cancel = () => {
     this.setState({
@@ -211,7 +235,8 @@ export default class HomePage extends React.Component {
                 null
               }
             </Space>
-
+            
+            <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Email' value={this.state.email} onChange={this.onEmailChange} prefix={<CommentOutlined />} />
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Display name' value={this.state.displayName} onChange={this.onDisplayNameChange} prefix={<UserOutlined />} />
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Website URL' value={this.state.website} onChange={this.onWebsiteChange} prefix={<GlobalOutlined />} />
             <Input className={Styles['simple-input']} bordered={false} size='large' placeholder='Twitter username' value={this.state.twitterUsername} onChange={this.onTwitterUsernameChange} prefix={<TwitterOutlined />} />
@@ -239,6 +264,9 @@ export default class HomePage extends React.Component {
               <Button type='primary' onClick={this.save} >Save</Button>
               <Button type='primary' onClick={this.cancel} >Cancel</Button>
             </Space>
+
+            
+
           </Space>
         </AppLayout>
       </TokenizedPage>

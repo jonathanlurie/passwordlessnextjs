@@ -77,6 +77,14 @@ const ERRORS = {
     code: 18,
     message: 'The data could not be udated for due to a database issue.'
   },
+  UPDATE_EMAIL_MISSING_TOKEN: {
+    code: 19,
+    message: 'The update-email token is missing.',
+  },
+  UPDATE_EMAIL_INVALID_TOKEN: {
+    code: 20,
+    message: 'The update-email token is invalid or expired.',
+  },
 }
 
 

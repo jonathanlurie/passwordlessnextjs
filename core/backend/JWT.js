@@ -56,6 +56,17 @@ export default class JWT {
 
 
   /**
+   * Generates a JWT that is only made for updating the email address.
+   * This kind of token is valid for only 10 minutes.
+   * @param {string} username 
+   * @return {string} a JWT with 'login' as a subject
+   */
+  static emailUpdateMagicLink(username, futureEmail) {
+    return JWT.sign({subject: 'emailUpdate', username, futureEmail}, process.env.LOGIN_TOKEN_LIFETIME)
+  }
+
+
+  /**
    * Generates a refresh token. Not meant to be shared with the user,
    * it is going to remain in a secure cookie.
    * This kind of token is valid for 3 days.

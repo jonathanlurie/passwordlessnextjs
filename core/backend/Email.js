@@ -67,4 +67,32 @@ export default class Email {
         html,
       })
   }
+
+
+  static async sendUpdateEmailLink(to, updatedEmail, updatEmailUrl, username) {
+    const html = `
+      <div>
+        <p>
+          Hello ${username},
+        </p>
+        <p>
+          you have required to update your email address on ${process.env.PRODUCT_NAME} to be <b>${updatedEmail}</b>. Please click on the link below to confirm.
+        </p>
+        <p>
+          <a href="${updatEmailUrl}">Update to ${updatedEmail}</a>
+        </p>
+        <p>
+          Best,<br>
+          The ${process.env.PRODUCT_NAME} team.
+        </p>
+      </div>
+    `
+
+    await Email.sendEmail(to,
+      {
+        subject: `Email update confirmation to ${process.env.PRODUCT_NAME}`,
+        text: `Hello,\nyou have required to update your email address on ${process.env.PRODUCT_NAME} to be ${updatedEmail}. Please follow this link to confirm:\n${updatEmailUrl}\nBest,\nThe ${process.env.PRODUCT_NAME} team.`,
+        html,
+      })
+  }
 }

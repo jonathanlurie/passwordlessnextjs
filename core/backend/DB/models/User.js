@@ -99,6 +99,12 @@ function init() {
   }
 
 
+  userSchema.methods.updateEmail = async function(futureEmail) {
+    this.email = futureEmail
+    await this.save()
+  }
+
+
   // turn the model into a plain JS object without MongoDB _props
   userSchema.methods.strip = function() {
     const obj = this.toObject({flattenMaps: true, versionKey: false})

@@ -10,6 +10,9 @@ import accessToken from '../../core/backend/accessToken'
 import initDB from '../../core/backend/DB'
 import nc from 'next-connect'
 import ErrorCodes from '../../core/fullstack/ErrorCodes'
+import Tools from '../../core/fullstack/Tools'
+import JWT from '../../core/backend/JWT'
+import Email from '../../core/backend/Email'
 
 
 
@@ -49,6 +52,24 @@ const handler = nc()
       res.statusCode = 500
       console.log(e)
       return res.json({data: null, error: ErrorCodes.DATABASE_UPDATE_ERROR.code})
+    }
+
+    const currentEmail = req.user.email.trim().toLowerCase()
+    const updatedEmail = req.body.email.trim().toLowerCase()
+
+    // if the user wants to update the email, then a request is sent to the curent email
+    if (currentEmail !== updatedEmail && Tools.isEmail(updatedEmail)) {
+      const magicLinkToken = JWT.emailUpdateMagicLink(req.user.username, updatedEmail)
+      const updatEmailUrl = `${process.env.APP_URL}/api/updatemail?token=${magicLinkToken}`
+      
+      try {
+        await Email.sendUpdateEmailLink(currentEmail, updatedEmail, updatEmailUrl, req.user.username)
+        console.log('The email was sent.')
+      } catch (e) {
+        console.log(e)
+        res.statusCode = 503
+        return res.json({ error: 'Unable to send the email.' })
+      }
     }
 
     res.statusCode = 200
