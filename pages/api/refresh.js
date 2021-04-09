@@ -50,9 +50,11 @@ const handler = nc()
     const username = refreshTokenInfo.data.username
     const user = await User.findByUsername(username)
 
+    // This could be the result of a deleted user while the cookie is still present
+    // (or something that would lead to this situation, such as a delete or change of DB)
     if (!user) {
       res.statusCode = 404
-      res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING.code, data: null})
+      return res.json({ error: ErrorCodes.USERNAME_NOT_EXISTING.code, data: null})
     }
 
     // from here, things are good.
@@ -70,7 +72,7 @@ const handler = nc()
     // Then let's get an access token and send it back
     const accessToken = JWT.accessToken(user.username)
     res.statusCode = 200
-    res.json({ error: null, data: accessToken})
+    return res.json({ error: null, data: accessToken})
   })
 
 
