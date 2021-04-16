@@ -11,14 +11,12 @@ export default async function accessToken(req, res, next) {
 
   if (!bearer) {
     res.statusCode = 401
-    res.json({ error: ErrorCodes.ACCESS_TOKEN_INVALID, data: null })
-    return next()
+    return res.json({ error: ErrorCodes.ACCESS_TOKEN_INVALID, data: null })
   }
 
   if (typeof bearer !== 'string' || !bearer.startsWith('Bearer')) {
     res.statusCode = 401
-    res.json({ error: ErrorCodes.ACCESS_TOKEN_INVALID, data: null })
-    return next()
+    return res.json({ error: ErrorCodes.ACCESS_TOKEN_INVALID, data: null })
   }
 
   const accessToken = bearer.split(' ').pop()
@@ -26,8 +24,7 @@ export default async function accessToken(req, res, next) {
   
   if (tokenInfo.error) {
     res.statusCode = 401
-    res.json({ error: ErrorCodes.ACCESS_TOKEN_INVALID, data: null })
-    return next()
+    return res.json({ error: ErrorCodes.ACCESS_TOKEN_INVALID, data: null })
   }
 
   req.accessTokenData = {
@@ -39,8 +36,7 @@ export default async function accessToken(req, res, next) {
 
   if (!user) {
     res.statusCode = 401
-    res.json({ error: ErrorCodes.USER_NOT_EXISTING, data: null })
-    return next()
+    return res.json({ error: ErrorCodes.USER_NOT_EXISTING, data: null })
   }
 
   req.user = user

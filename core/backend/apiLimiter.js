@@ -33,7 +33,7 @@ export default function apiLimiter(req, res, next = null) {
   if (_visitors[uniqueVisitorId][now].length > LIMIT_PER_SECONDS) {
     req.apiLimit = true
     res.statusCode = 429
-    res.json({ error: 'Too many requests' })
+    return res.json({ error: 'Too many requests' })
   } else {
     req.apiLimit = false
   }
